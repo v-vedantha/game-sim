@@ -118,7 +118,7 @@ Value parseValue(TokenStream& stream) {
 Card parseCard(TokenStream& stream) {
     Value value = parseValue(stream);
     Suit suit = parseSuit(stream);
-    return Card(suit, value);
+    return Card(value, suit);
 }
 
 

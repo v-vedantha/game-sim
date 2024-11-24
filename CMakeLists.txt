@@ -13,16 +13,29 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-
 enable_testing()
+
+add_library(PokerLib src/Card.cpp src/CardParser.cpp)
 
 add_executable(
   CardParserTest
   test/CardParserTest.cpp
 )
+
 target_link_libraries(
   CardParserTest
-  GTest::gtest_main
+  PUBLIC GTest::gtest_main
+  PUBLIC PokerLib
+)
+
+target_include_directories(
+  CardParserTest
+  PUBLIC include
+)
+
+target_include_directories(
+  PokerLib
+  PUBLIC include
 )
 
 include(GoogleTest)

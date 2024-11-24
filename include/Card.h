@@ -27,7 +27,7 @@ class Card {
     Suit suit;
     Value value;
 public:
-    Card(Suit suit, Value value);
+    Card(Value value, Suit suit);
 
     bool operator==(const Card& other) const {
         return this->suit == other.suit && this->value == other.value;
