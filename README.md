@@ -1,2 +1,3 @@
 # game-sim
-Coding practice
+
+This is a hand evaluator/equity calculator for Texas Holdem Poker.
