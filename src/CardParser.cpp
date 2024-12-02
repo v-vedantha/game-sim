@@ -53,21 +53,21 @@ Suit parseSuit(TokenStream& stream) {
     char suit = stream.consume();
     switch (suit) {
         case 'H':
-            return HEARTS;
+            return Suit::HEARTS;
         case 'D':
-            return DIAMONDS;
+            return Suit::DIAMONDS;
         case 'C':
-            return CLUBS;
+            return Suit::CLUBS;
         case 'S':
-            return SPADES;
+            return Suit::SPADES;
         case 'h':
-            return HEARTS;
+            return Suit::HEARTS;
         case 'd':
-            return DIAMONDS;
+            return Suit::DIAMONDS;
         case 'c':
-            return CLUBS;
+            return Suit::CLUBS;
         case 's':
-            return SPADES;
+            return Suit::SPADES;
         default:
             throw ParseFailed(std::format("Invalid suit: Got {} Expected H, D, C, S (or lower case)", suit));
     }
@@ -77,39 +77,39 @@ Value parseValue(TokenStream& stream) {
     char firstChar = stream.consume();
     switch (firstChar) {
         case '2':
-            return TWO;
+            return Value::TWO;
         case '3':
-            return THREE;
+            return Value::THREE;
         case '4':
-            return FOUR;
+            return Value::FOUR;
         case '5':
-            return FIVE;
+            return Value::FIVE;
         case '6':
-            return SIX;
+            return Value::SIX;
         case '7':
-            return SEVEN;
+            return Value::SEVEN;
         case '8':
-            return EIGHT;
+            return Value::EIGHT;
         case '9':
-            return NINE;
+            return Value::NINE;
         case '1':
             { 
                 char secondChar = stream.consume();
                 if (secondChar == '0') {
-                    return TEN;
+                    return Value::TEN;
                 }
                 else {
                     throw ParseFailed(std::format("Invalid value: Expected a 0 after a 1", secondChar));
                 }
             }
         case 'J':
-            return JACK;
+            return Value::JACK;
         case 'Q':
-            return QUEEN;
+            return Value::QUEEN;
         case 'K':
-            return KING;
+            return Value::KING;
         case 'A':
-            return ACE;
+            return Value::ACE;
         default:
             throw ParseFailed(std::format("Invalid value: Got {}Expected 2-9, J, Q, K, A", firstChar));
     }

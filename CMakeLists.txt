@@ -15,11 +15,13 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
-add_library(PokerLib src/Card.cpp src/CardParser.cpp)
+add_library(PokerLib src/Card.cpp src/CardParser.cpp src/HandEvaluator.cpp src/HandRanker.cpp)
 
 add_executable(
   CardParserTest
   test/CardParserTest.cpp
+  test/HandEvaluatorTest.cpp
+  test/HandRankerTest.cpp
 )
 
 target_link_libraries(

@@ -3,11 +3,11 @@
 #include "CardParser.h"
 
 TEST(CardParsingTest, AceOfSpades) {
-    EXPECT_EQ(parseCard("AS"), Card(ACE, SPADES));
+    EXPECT_EQ(parseCard("AS"), Card(Value::ACE, Suit::SPADES));
 };
 
 TEST(CardParsingTest, TenOfHearts) {
-    EXPECT_EQ(parseCard("10h"), Card(TEN, HEARTS));
+    EXPECT_EQ(parseCard("10h"), Card(Value::TEN, Suit::HEARTS));
 };
 
 TEST(CardParsingTest, ElevenCausesException) {
@@ -15,6 +15,6 @@ TEST(CardParsingTest, ElevenCausesException) {
 };
 
 TEST(CardParsingTest, MultipleCards) {
-    std::vector<Card> expectedOutput = {Card(TEN, HEARTS), Card(NINE, SPADES)};
+    std::vector<Card> expectedOutput = {Card(Value::TEN, Suit::HEARTS), Card(Value::NINE, Suit::SPADES)};
     EXPECT_EQ(parseCards("10h9s"), expectedOutput);
 };

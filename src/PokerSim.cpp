@@ -2,8 +2,8 @@
 
 
 int main() {
-    // HiddenCards hand1;
-    // HiddenCards hand2;
+    // std::array<Card, 2> hand1;
+    // std::array<Card, 2> hand2;
 
     // requestHand(&hand1);
     // requestHand(&hand2);
