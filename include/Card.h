@@ -1,14 +1,18 @@
 #pragma once
 #include <string>
+#include <vector>
 
 enum class Suit {
+    SUIT_UNSPECIFIED,
     HEARTS,
     DIAMONDS,
     CLUBS,
     SPADES
 };
 
+
 enum class Value {
+    VALUE_UNSPECIFIED,
     TWO = 2,
     THREE = 3,
     FOUR = 4,
@@ -24,19 +28,37 @@ enum class Value {
     ACE = 14
 };
 
+
+extern const std::vector<Suit> allSuits; //= {Suit::HEARTS, Suit::DIAMONDS, Suit::CLUBS, Suit::SPADES};
+extern const std::vector<Value> allValues; // = {Value::TWO, Value::THREE, Value::FOUR, Value::FIVE, Value::SIX, Value::SEVEN, Value::EIGHT, Value::NINE, Value::TEN, Value::JACK, Value::QUEEN, Value::KING, Value::ACE};
+
 class Card {
 public:
     Suit suit;
     Value value;
+
     Card(Value value, Suit suit);
+    Card();
 
     bool operator==(const Card& other) const {
         return this->suit == other.suit && this->value == other.value;
     }
 
-    bool operator<(const Card& other) const {
-        return this->value < other.value;
-    }
+    friend std::ostream& operator<<(std::ostream& os, const Card& card);
 
-    std::string toString() const;
 };
+
+std::ostream& operator<<(std::ostream& os, const Card& card);
+std::ostream& operator<<(std::ostream& os, const Value& value);
+std::ostream& operator<<(std::ostream& os, const Suit& suit);
+
+struct CardComparator {
+    bool operator()(const Card& c1, const Card& c2) const;
+};
+
+struct CardReverseComparator {
+    bool operator()(const Card& c1, const Card& c2) const;
+};
+
+int compareValue(Value& v1, Value& v2);
+

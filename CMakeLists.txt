@@ -15,24 +15,44 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
-add_library(PokerLib src/Card.cpp src/CardParser.cpp src/HandEvaluator.cpp src/HandRanker.cpp)
+add_library(PokerLib src/Card.cpp 
+                     src/CardParser.cpp 
+                     src/Combinations.cpp
+                     src/Deck.cpp
+                     src/Equities.cpp
+                     src/Game.cpp
+                     src/Board.cpp
+                     src/Hand.cpp
+                     src/HoleCards.cpp
+                     src/Potential.cpp
+                     src/PlayerId.cpp
+                     src/Strength.cpp )
+
+add_library(TestLib  test/TestUtils.cpp )
 
 add_executable(
   CardParserTest
   test/CardParserTest.cpp
-  test/HandEvaluatorTest.cpp
-  test/HandRankerTest.cpp
+  test/HandTest.cpp
+  test/GameTest.cpp
+  test/HandPotentialTest.cpp
 )
 
 target_link_libraries(
   CardParserTest
   PUBLIC GTest::gtest_main
   PUBLIC PokerLib
+  PUBLIC TestLib
 )
 
 target_include_directories(
   CardParserTest
   PUBLIC include
+)
+
+target_include_directories(
+  CardParserTest
+  PUBLIC test
 )
 
 target_include_directories(

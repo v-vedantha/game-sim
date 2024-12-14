@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 #include <array>
-#include "HandEvaluator.h"
+#include "Hand.h"
 
 TEST(HandEvaluatorTest, StraightFlush) {
-    std::array<Card, 5> hand = {
+    std::array<Card, 5> cards = {
         Card(Value::ACE, Suit::CLUBS),
         Card(Value::TWO, Suit::CLUBS),
         Card(Value::THREE, Suit::CLUBS),
@@ -11,15 +11,17 @@ TEST(HandEvaluatorTest, StraightFlush) {
         Card(Value::FIVE, Suit::CLUBS)
     };
 
-    HandEvaluation result = evaluateHand(hand);
 
-    EXPECT_EQ(result.rank, HandRank::STRAIGHT_FLUSH);
+    Hand hand = Hand(cards);
+    Strength result = hand.evaluate();
+
+    EXPECT_EQ(result.rank, Rank::STRAIGHT_FLUSH);
     std::vector<Value> kicker = {Value::FIVE};
     EXPECT_EQ(result.kickers, kicker);
 }
 
 TEST(HandEvaluatorTest, Quads) {
-    std::array<Card, 5> hand = {
+    std::array<Card, 5> cards = {
         Card(Value::SIX, Suit::SPADES),
         Card(Value::SIX, Suit::CLUBS),
         Card(Value::SIX, Suit::DIAMONDS),
@@ -27,15 +29,16 @@ TEST(HandEvaluatorTest, Quads) {
         Card(Value::SEVEN, Suit::CLUBS)
     };
 
-    HandEvaluation result = evaluateHand(hand);
+    Hand hand = Hand(cards);
+    Strength result = hand.evaluate();
 
-    EXPECT_EQ(result.rank, HandRank::FOUR_OF_A_KIND);
+    EXPECT_EQ(result.rank, Rank::FOUR_OF_A_KIND);
     std::vector<Value> kicker = {Value::SIX, Value::SEVEN};
     EXPECT_EQ(result.kickers, kicker);
 }
 
 TEST(HandEvaluatorTest, Straight) {
-    std::array<Card, 5> hand = {
+    std::array<Card, 5> cards = {
         Card(Value::SIX, Suit::SPADES),
         Card(Value::TWO, Suit::CLUBS),
         Card(Value::THREE, Suit::DIAMONDS),
@@ -43,16 +46,17 @@ TEST(HandEvaluatorTest, Straight) {
         Card(Value::FIVE, Suit::CLUBS)
     };
 
-    HandEvaluation result = evaluateHand(hand);
+Hand hand = Hand(cards);
+    Strength result = hand.evaluate();
 
-    EXPECT_EQ(result.rank, HandRank::STRAIGHT);
+    EXPECT_EQ(result.rank, Rank::STRAIGHT);
     std::vector<Value> kicker = {Value::SIX};
     EXPECT_EQ(result.kickers, kicker);
 }
 
 
 TEST(HandEvaluatorTest, Flush) {
-    std::array<Card, 5> hand = {
+    std::array<Card, 5> cards = {
         Card(Value::JACK, Suit::DIAMONDS),
         Card(Value::TWO, Suit::DIAMONDS),
         Card(Value::THREE, Suit::DIAMONDS),
@@ -60,15 +64,16 @@ TEST(HandEvaluatorTest, Flush) {
         Card(Value::FIVE, Suit::DIAMONDS)
     };
 
-    HandEvaluation result = evaluateHand(hand);
+Hand hand = Hand(cards);
+    Strength result = hand.evaluate();
 
-    EXPECT_EQ(result.rank, HandRank::FLUSH);
-    std::vector<Value> kicker = {Value::JACK};
+    EXPECT_EQ(result.rank, Rank::FLUSH);
+    std::vector<Value> kicker = {Value::JACK, Value::FIVE, Value::FOUR, Value::THREE, Value::TWO};
     EXPECT_EQ(result.kickers, kicker);
 }
 
 TEST(HandEvaluatorTest, FULL_HOUSE) {
-    std::array<Card, 5> hand = {
+    std::array<Card, 5> cards = {
         Card(Value::ACE, Suit::SPADES),
         Card(Value::SEVEN, Suit::CLUBS),
         Card(Value::SEVEN, Suit::DIAMONDS),
@@ -76,15 +81,16 @@ TEST(HandEvaluatorTest, FULL_HOUSE) {
         Card(Value::SEVEN, Suit::CLUBS)
     };
 
-    HandEvaluation result = evaluateHand(hand);
+Hand hand = Hand(cards);
+    Strength result = hand.evaluate();
 
-    EXPECT_EQ(result.rank, HandRank::FULL_HOUSE);
+    EXPECT_EQ(result.rank, Rank::FULL_HOUSE);
     std::vector<Value> kicker = {Value::SEVEN, Value::ACE};
     EXPECT_EQ(result.kickers, kicker);
 }
 
 TEST(HandEvaluatorTest, Trips) {
-    std::array<Card, 5> hand = {
+    std::array<Card, 5> cards = {
         Card(Value::SIX, Suit::SPADES),
         Card(Value::SEVEN, Suit::CLUBS),
         Card(Value::SEVEN, Suit::DIAMONDS),
@@ -92,15 +98,16 @@ TEST(HandEvaluatorTest, Trips) {
         Card(Value::SEVEN, Suit::CLUBS)
     };
 
-    HandEvaluation result = evaluateHand(hand);
+Hand hand = Hand(cards);
+    Strength result = hand.evaluate();
 
-    EXPECT_EQ(result.rank, HandRank::THREE_OF_A_KIND);
+    EXPECT_EQ(result.rank, Rank::THREE_OF_A_KIND);
     std::vector<Value> kicker = {Value::SEVEN, Value::ACE, Value::SIX};
     EXPECT_EQ(result.kickers, kicker);
 }
 
 TEST(HandEvaluatorTest, TwoPair) {
-    std::array<Card, 5> hand = {
+    std::array<Card, 5> cards = {
         Card(Value::SIX, Suit::SPADES),
         Card(Value::SEVEN, Suit::CLUBS),
         Card(Value::SEVEN, Suit::DIAMONDS),
@@ -108,15 +115,16 @@ TEST(HandEvaluatorTest, TwoPair) {
         Card(Value::SIX, Suit::CLUBS)
     };
 
-    HandEvaluation result = evaluateHand(hand);
+    Hand hand = Hand(cards);
+    Strength result = hand.evaluate();
 
-    EXPECT_EQ(result.rank, HandRank::TWO_PAIR);
+    EXPECT_EQ(result.rank, Rank::TWO_PAIR);
     std::vector<Value> kicker = {Value::SEVEN, Value::SIX, Value::ACE};
     EXPECT_EQ(result.kickers, kicker);
 }
 
 TEST(HandEvaluatorTest, Pair) {
-    std::array<Card, 5> hand = {
+    std::array<Card, 5> cards = {
         Card(Value::SIX, Suit::SPADES),
         Card(Value::SEVEN, Suit::CLUBS),
         Card(Value::SEVEN, Suit::DIAMONDS),
@@ -124,16 +132,17 @@ TEST(HandEvaluatorTest, Pair) {
         Card(Value::EIGHT, Suit::CLUBS)
     };
 
-    HandEvaluation result = evaluateHand(hand);
+    Hand hand = Hand(cards);
+    Strength result = hand.evaluate();
 
-    EXPECT_EQ(result.rank, HandRank::PAIR);
+    EXPECT_EQ(result.rank, Rank::PAIR);
     std::vector<Value> kicker = {Value::SEVEN, Value::ACE, Value::EIGHT, Value::SIX};
     EXPECT_EQ(result.kickers, kicker);
 }
 
 
 TEST(HandEvaluatorTest, HighCard) {
-    std::array<Card, 5> hand = {
+    std::array<Card, 5> cards = {
         Card(Value::SIX, Suit::SPADES),
         Card(Value::SEVEN, Suit::CLUBS),
         Card(Value::JACK, Suit::DIAMONDS),
@@ -141,9 +150,10 @@ TEST(HandEvaluatorTest, HighCard) {
         Card(Value::EIGHT, Suit::CLUBS)
     };
 
-    HandEvaluation result = evaluateHand(hand);
+    Hand hand = Hand(cards);
+    Strength result = hand.evaluate();
 
-    EXPECT_EQ(result.rank, HandRank::HIGH_CARD);
+    EXPECT_EQ(result.rank, Rank::HIGH_CARD);
     std::vector<Value> kicker = {Value::ACE, Value::JACK, Value::EIGHT, Value::SEVEN, Value::SIX};
     EXPECT_EQ(result.kickers, kicker);
 }
