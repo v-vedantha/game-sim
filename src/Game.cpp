@@ -12,18 +12,18 @@ Game::Game(std::vector<PlayerId> players) {
 }
 
 void Game::dealToPlayer(PlayerId player, std::vector<Card> cards) {
-    holeCards[player].deal(cards);
-    deck.deal(cards);
+    holeCards[player].addCards(cards);
+    deck.removeCards(cards);
 }
 
 void Game::dealToBoard(std::vector<Card> cards) {
-    board.deal(cards);
-    deck.deal(cards);
+    board.addCards(cards);
+    deck.removeCards(cards);
 }
 
 void Game::dealToBoard() {
     Card card = deck.deal();
-    board.deal(card);
+    board.addCard(card);
 }
 
 
@@ -58,8 +58,8 @@ void Game::shuffleDeck() {
     deck.shuffle();
 }
 
-Equities Game::equities(int randomSeed) {
-    EquitiesBuilder equitiesBuilder = EquitiesBuilder(players);
+WinningProbabilities Game::winningProbabilities(int randomSeed) {
+    WinningProbabilitiesBuilder winningProbabilitiesBuilder = WinningProbabilitiesBuilder(players);
 
     std::mt19937 g(randomSeed);
     // Simualate a large number of runouts
@@ -80,10 +80,10 @@ Equities Game::equities(int randomSeed) {
         }
 
         std::vector<PlayerId> winners = simulatedGame.getWinners();
-        equitiesBuilder.addRunoutResult(winners);
+        winningProbabilitiesBuilder.addRunoutResult(winners);
     }
 
-    return equitiesBuilder.equities();
+    return winningProbabilitiesBuilder.winningProbabilities();
 }
 
 

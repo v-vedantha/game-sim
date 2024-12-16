@@ -29,8 +29,8 @@ enum class Value {
 };
 
 
-extern const std::vector<Suit> allSuits; //= {Suit::HEARTS, Suit::DIAMONDS, Suit::CLUBS, Suit::SPADES};
-extern const std::vector<Value> allValues; // = {Value::TWO, Value::THREE, Value::FOUR, Value::FIVE, Value::SIX, Value::SEVEN, Value::EIGHT, Value::NINE, Value::TEN, Value::JACK, Value::QUEEN, Value::KING, Value::ACE};
+extern const std::vector<Suit> allSuits; 
+extern const std::vector<Value> allValues;
 
 class Card {
 public:

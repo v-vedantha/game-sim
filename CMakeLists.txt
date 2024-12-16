@@ -19,7 +19,7 @@ add_library(PokerLib src/Card.cpp
                      src/CardParser.cpp 
                      src/Combinations.cpp
                      src/Deck.cpp
-                     src/Equities.cpp
+                     src/WinningProbabilities.cpp
                      src/Game.cpp
                      src/Board.cpp
                      src/Hand.cpp

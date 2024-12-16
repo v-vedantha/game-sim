@@ -7,8 +7,8 @@ class Deck {
 public:
     Deck();
 
-    void deal(std::vector<Card> cards);
-    void deal(Card cards);
+    void removeCards(std::vector<Card> cards);
+    void removeCard(Card cards);
     Card deal();
     void shuffle();
     void shuffle(std::mt19937& rng);

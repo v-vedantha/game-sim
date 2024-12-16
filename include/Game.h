@@ -4,7 +4,7 @@
 #include "Board.h"
 #include "Deck.h"
 #include "PlayerId.h"
-#include "Equities.h"
+#include "WinningProbabilities.h"
 
 class Game {
 public:
@@ -17,7 +17,7 @@ public:
     void shuffleDeck();
     void shuffleDeck(std::mt19937& rng);
 
-    Equities equities(int randomSeed);    
+    WinningProbabilities winningProbabilities(int randomSeed);    
     std::vector<PlayerId> getWinners();
 
 private:

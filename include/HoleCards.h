@@ -10,8 +10,8 @@ public:
     HoleCards();
     HoleCards(std::vector<Card> cards);
 
-    void deal(std::vector<Card> cards);
-    void deal(Card card);
+    void addCards(std::vector<Card> cards);
+    void addCard(Card card);
     
     Strength evaluate(Board& board);
 

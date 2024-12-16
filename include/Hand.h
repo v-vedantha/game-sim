@@ -4,6 +4,10 @@
 #include <vector>
 #include <set>
 
+// In poker you compare the best 5-card-hand each player has.
+// A hand is a wrapper around 5-cards that lets you evaluate properties
+// of the hand.
+
 
 struct HasFlush {
     bool isFlush;

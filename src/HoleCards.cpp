@@ -14,13 +14,13 @@ HoleCards::HoleCards(std::vector<Card> cards) {
     this->cards = cards;
 }
 
-void HoleCards::deal(std::vector<Card> cards) {
+void HoleCards::addCards(std::vector<Card> cards) {
     for (const Card& card : cards) {
         this->cards.push_back(card);
     }
 }
 
-void HoleCards::deal(Card card) {
+void HoleCards::addCard(Card card) {
     this->cards.push_back(card);
 }
 
@@ -53,12 +53,8 @@ Potential HoleCards::evaluatePotential(Board& board, Street& street, int randomS
     std::mt19937 g(randomSeed);
 
     Deck deck;
-    for (Card card : cards) {
-        deck.deal(card);
-    }
-    for (Card card : board.getCards()) {
-        deck.deal(card);
-    }
+    deck.removeCards(cards);
+    deck.removeCards(board.getCards());
 
     PotentialBuilder potentialBuilder;
 

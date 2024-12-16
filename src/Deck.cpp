@@ -24,13 +24,13 @@ void Deck::shuffle(std::mt19937& rng) {
     this->cards = std::list<Card>(cardsVec.begin(), cardsVec.end());
 }
 
-void Deck::deal(std::vector<Card> cardsToDeal) {
-    for (const Card& toRemove : cardsToDeal) {
+void Deck::removeCards(std::vector<Card> cardsToRemove) {
+    for (const Card& toRemove : cardsToRemove) {
         this->cards.remove_if([&toRemove](Card deckCard){ return deckCard == toRemove; });
     }
 }
-void Deck::deal(Card cardToDeal) {
-    this->cards.remove_if([&cardToDeal](Card deckCard){ return deckCard == cardToDeal; });
+void Deck::removeCard(Card toRemove) {
+    this->cards.remove_if([&toRemove](Card deckCard){ return deckCard == toRemove; });
 }
 
 Card Deck::deal(){

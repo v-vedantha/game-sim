@@ -7,11 +7,11 @@
 Board::Board() {}
 Board::Board(std::vector<Card> cards) : cards(cards) {}
 
-void Board::deal(Card card) {
+void Board::addCard(Card card) {
     cards.push_back(card);
 }
 
-void Board::deal(std::vector<Card> cards) {
+void Board::addCards(std::vector<Card> cards) {
     this->cards.insert(this->cards.end(), cards.begin(), cards.end());
 }
 
@@ -25,11 +25,6 @@ std::vector<Card> Board::getCards() {
     return cards;
 }
 
-Strength Board::strength() {
-    Hand hand(cards);
-    return hand.evaluate();
-}
-
 std::map<Street, int> totalCardsAtStreet = {
     {Street::FLOP, 3},
     {Street::TURN, 4},
@@ -38,7 +33,7 @@ std::map<Street, int> totalCardsAtStreet = {
 
 void Board::dealToStreet(Deck& deck, Street& street) {
     while (cards.size() < totalCardsAtStreet[street]) {
-        deal(deck.deal());
+        addCard(deck.deal());
     }
 }
 

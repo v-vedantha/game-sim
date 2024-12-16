@@ -34,29 +34,29 @@ TEST(GameTest, Tie) {
     EXPECT_TRUE(isIn(p2, winners));
 }
 
-TEST(EquitiesTest, PairVsPair) {
+TEST(winningProbabilitiesTest, PairVsPair) {
     PlayerId p1 = PlayerId("P1");
     PlayerId p2 = PlayerId("P2");
     Game game = Game({p1, p2});
     game.dealToPlayer(p1, {Card(Value::TWO, Suit::HEARTS), Card(Value::TWO, Suit::CLUBS)});
     game.dealToPlayer(p2, {Card(Value::ACE, Suit::HEARTS), Card(Value::ACE, Suit::CLUBS)});
 
-    Equities equities = game.equities(42);
+    WinningProbabilities winningProbabilities = game.winningProbabilities(42);
 
-    EXPECT_TRUE(isNear(equities.getEquity(p1), 0.13));
-    EXPECT_TRUE(isNear(equities.getEquity(p2), 0.87));
+    EXPECT_TRUE(isNear(winningProbabilities.getProbabilityOfWinning(p1), 0.13));
+    EXPECT_TRUE(isNear(winningProbabilities.getProbabilityOfWinning(p2), 0.87));
 }
 
 
-TEST(EquitiesTest, PairVsOverCards) {
+TEST(winningProbabilitiesTest, PairVsOverCards) {
     PlayerId p1 = PlayerId("P1");
     PlayerId p2 = PlayerId("P2");
     Game game = Game({p1, p2});
     game.dealToPlayer(p1, {Card(Value::TWO, Suit::HEARTS), Card(Value::TWO, Suit::CLUBS)});
     game.dealToPlayer(p2, {Card(Value::ACE, Suit::HEARTS), Card(Value::JACK, Suit::CLUBS)});
 
-    Equities equities = game.equities(42);
+    WinningProbabilities winningProbabilities = game.winningProbabilities(42);
 
-    EXPECT_TRUE(isNear(equities.getEquity(p1), 0.58));
-    EXPECT_TRUE(isNear(equities.getEquity(p2), 0.43));
+    EXPECT_TRUE(isNear(winningProbabilities.getProbabilityOfWinning(p1), 0.58));
+    EXPECT_TRUE(isNear(winningProbabilities.getProbabilityOfWinning(p2), 0.43));
 }
