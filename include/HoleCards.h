@@ -5,6 +5,8 @@
 #include "Deck.h"
 #include "Strength.h"
 
+// HoleCards represents thw two cards each player has.
+
 class HoleCards {
 public:
     HoleCards();

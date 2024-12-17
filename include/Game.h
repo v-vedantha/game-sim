@@ -10,8 +10,11 @@ class Game {
 public:
     Game(std::vector<PlayerId> players);
 
+    // For testing, deals specific cards to each player
     void dealToPlayer(PlayerId player, std::vector<Card> cards);
+    // For testing, deals specific cards to the board 
     void dealToBoard(std::vector<Card> cards);
+
     void dealToBoard();
 
     void shuffleDeck();
