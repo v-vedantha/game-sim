@@ -9,7 +9,9 @@
 // Streets are the common term to represent the number of cards on the board.
 // Initially (Preflop), there are zero cards, then after the Flop there are 3
 // then after the turn there are 4, and the river 5.
-enum class Street {STREET_UNSPECIFIED, FLOP, TURN, RIVER};
+enum class Street {STREET_UNSPECIFIED, PREFLOP, FLOP, TURN, RIVER};
+
+Street nextStreet(Street street);
 
 class Board {
     std::vector<Card> cards;

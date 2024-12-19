@@ -4,6 +4,21 @@
 #include "Strength.h"
 #include <ostream>
 
+Street nextStreet(Street street) {
+    switch (street) {
+        case Street::STREET_UNSPECIFIED:
+            throw std::runtime_error("Not in a street");
+        case Street::PREFLOP:
+            return Street::FLOP;
+        case Street::FLOP:
+            return Street::TURN;
+        case Street::TURN:
+            return Street::RIVER;
+        case Street::RIVER:
+            throw std::runtime_error("No more streets");
+    }
+}
+
 Board::Board() {}
 Board::Board(std::vector<Card> cards) : cards(cards) {}
 

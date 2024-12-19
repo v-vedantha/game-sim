@@ -15,18 +15,24 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
-add_library(PokerLib src/Card.cpp 
-                     src/CardParser.cpp 
+add_library(PokerLib src/Bets.cpp
+                     src/BettingRound.cpp
+                     src/Board.cpp
+                     src/Card.cpp
+                     src/CardParser.cpp
                      src/Combinations.cpp
                      src/Deck.cpp
-                     src/WinningProbabilities.cpp
                      src/Game.cpp
-                     src/Board.cpp
                      src/Hand.cpp
                      src/HoleCards.cpp
-                     src/Potential.cpp
+                     src/Player.cpp
                      src/PlayerId.cpp
-                     src/Strength.cpp )
+                     src/PlayersInHand.cpp
+                     src/Pot.cpp
+                     src/Potential.cpp
+                     src/Strength.cpp
+                     src/TableCards.cpp
+                     src/WinningProbabilities.cpp)
 
 add_library(TestLib  test/TestUtils.cpp )
 
@@ -34,8 +40,9 @@ add_executable(
   CardParserTest
   test/CardParserTest.cpp
   test/HandTest.cpp
-  test/GameTest.cpp
+  test/GameOddsTest.cpp
   test/HandPotentialTest.cpp
+  test/FullGameTest.cpp
 )
 
 target_link_libraries(

@@ -1,0 +1,35 @@
+#pragma once
+#include "Card.h"
+#include "HoleCards.h"
+#include "Board.h"
+#include "Deck.h"
+#include "PlayerId.h"
+#include "WinningProbabilities.h"
+
+class TableCards {
+public:
+    TableCards(std::vector<PlayerId> players);
+
+    void startGame();
+
+    void dealToStreet(Street street);
+
+    void shuffleDeck();
+    void shuffleDeck(std::mt19937& rng);
+
+    WinningProbabilities winningProbabilities(int randomSeed);    
+    std::vector<PlayerId> getWinners();
+    std::vector<PlayerId> getWinners(const std::vector<PlayerId>& eligiblePlayers);
+
+    // For testing
+    void dealToPlayer(PlayerId player, std::vector<Card> cards);
+    void dealToBoard(std::vector<Card> cards);
+    void dealToBoard();
+private:
+    std::vector<PlayerId> players;
+    std::unordered_map<PlayerId, HoleCards> holeCards;
+
+    Board board;
+    Deck deck;
+};
+

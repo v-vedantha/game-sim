@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 #include "Card.h"
-#include "Game.h"
+#include "TableCards.h"
 #include "PlayerId.h"
 #include "TestUtils.h"
 
@@ -15,10 +15,10 @@ bool isIn(PlayerId player, std::vector<PlayerId> players) {
     return false;
 }
 
-TEST(GameTest, Tie) {
+TEST(TableCardsTest, Tie) {
     PlayerId p1 = PlayerId("P1");
     PlayerId p2 = PlayerId("P2");
-    Game game = Game({p1, p2});
+    TableCards game = TableCards({p1, p2});
     game.dealToPlayer(p1, {Card(Value::TWO, Suit::HEARTS), Card(Value::TWO, Suit::CLUBS)});
     game.dealToPlayer(p2, {Card(Value::ACE, Suit::HEARTS), Card(Value::ACE, Suit::CLUBS)});
     game.dealToBoard({Card(Value::ACE, Suit::SPADES),
@@ -34,10 +34,10 @@ TEST(GameTest, Tie) {
     EXPECT_TRUE(isIn(p2, winners));
 }
 
-TEST(winningProbabilitiesTest, PairVsPair) {
+TEST(WinningProbabilitiesTest, PairVsPair) {
     PlayerId p1 = PlayerId("P1");
     PlayerId p2 = PlayerId("P2");
-    Game game = Game({p1, p2});
+    TableCards game = TableCards({p1, p2});
     game.dealToPlayer(p1, {Card(Value::TWO, Suit::HEARTS), Card(Value::TWO, Suit::CLUBS)});
     game.dealToPlayer(p2, {Card(Value::ACE, Suit::HEARTS), Card(Value::ACE, Suit::CLUBS)});
 
@@ -48,10 +48,10 @@ TEST(winningProbabilitiesTest, PairVsPair) {
 }
 
 
-TEST(winningProbabilitiesTest, PairVsOverCards) {
+TEST(WinningProbabilitiesTest, PairVsOverCards) {
     PlayerId p1 = PlayerId("P1");
     PlayerId p2 = PlayerId("P2");
-    Game game = Game({p1, p2});
+    TableCards game = TableCards({p1, p2});
     game.dealToPlayer(p1, {Card(Value::TWO, Suit::HEARTS), Card(Value::TWO, Suit::CLUBS)});
     game.dealToPlayer(p2, {Card(Value::ACE, Suit::HEARTS), Card(Value::JACK, Suit::CLUBS)});
 

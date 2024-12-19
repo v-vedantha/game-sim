@@ -14,7 +14,9 @@ public:
 
     void addCards(std::vector<Card> cards);
     void addCard(Card card);
-    
+
+    void dealCards(Deck& deck);
+
     Strength evaluate(Board& board);
 
     Potential evaluatePotential(Board& board, Street& street, int randomSeed);

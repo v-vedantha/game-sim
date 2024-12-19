@@ -12,7 +12,7 @@ class PlayerId {
 
         friend std::ostream& operator<<(std::ostream& os, const PlayerId& playerId);
 };
-
+std::ostream& operator<<(std::ostream& os, const PlayerId& playerId);
 namespace std {
     template <>
     struct hash<PlayerId> {

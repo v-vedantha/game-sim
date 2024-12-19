@@ -1,33 +1,55 @@
 #pragma once
-#include "Card.h"
-#include "HoleCards.h"
-#include "Board.h"
-#include "Deck.h"
 #include "PlayerId.h"
-#include "WinningProbabilities.h"
+#include "TableCards.h"
+#include "Bets.h"
+#include <memory> 
+#include <map>
+
+class Player;
 
 class Game {
+
 public:
-    Game(std::vector<PlayerId> players);
 
-    // For testing, deals specific cards to each player
-    void dealToPlayer(PlayerId player, std::vector<Card> cards);
-    // For testing, deals specific cards to the board 
-    void dealToBoard(std::vector<Card> cards);
+    void addPlayer(std::shared_ptr<Player> player);
 
-    void dealToBoard();
+    void finish();
 
-    void shuffleDeck();
-    void shuffleDeck(std::mt19937& rng);
 
-    WinningProbabilities winningProbabilities(int randomSeed);    
-    std::vector<PlayerId> getWinners();
+    void dealToNextStreet();
+
+    PlayerId nextIdToAct();
+
+    // Should always match nextIdToAct so technically unnecessary
+    // but it is useful to be confident that the game is in a consistent state.
+    void check(PlayerId playerId);
+    int call(PlayerId playerId);
+    void raise(PlayerId playerId, int amount);
+    void reraise(PlayerId playerId, int amount);
+    void allIn(PlayerId playerId, int amount);
+
+
+    Game(std::vector<std::weak_ptr<Player>> players);
 
 private:
-    std::vector<PlayerId> players;
-    std::unordered_map<PlayerId, HoleCards> holeCards;
+    std::vector<std::weak_ptr<Player>> players;
 
-    Board board;
-    Deck deck;
+    std::unordered_map<PlayerId, std::weak_ptr<Player>> playersById;
+    TableCards tableCards;
+
+    // Game owns playersInHand
+    std::shared_ptr<PlayersInHand> playersInHand;
+
+    Bets bets;
+
+    Street street;
+
 };
 
+class GameBuilder {
+public:
+    void addPlayer(std::shared_ptr<Player> player);
+    std::shared_ptr<Game> build();
+private:
+    std::vector<std::weak_ptr<Player>> players;
+};

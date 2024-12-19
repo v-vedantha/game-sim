@@ -2,7 +2,7 @@
 #include <iostream>
 #include "Card.h"
 #include "Strength.h"
-#include "Game.h"
+#include "TableCards.h"
 #include "PlayerId.h"
 #include "TestUtils.h"
 

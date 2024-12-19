@@ -1,90 +1,98 @@
 #include "Game.h"
-#include <set>
+#include "Player.h"
+#include <memory>
+#include <cassert>
 #include <iostream>
-#include <random>
+#include <vector>
 
-Game::Game(std::vector<PlayerId> players) {
-    for (const PlayerId& player : players) {
-        holeCards[player] = HoleCards();
+void GameBuilder::addPlayer(std::shared_ptr<Player> player) {
+    this->players.push_back(player);
+}
+
+std::shared_ptr<Game> GameBuilder::build() {
+    std::shared_ptr<Game> game = std::make_shared<Game>(players);
+    for (std::weak_ptr<Player>& player : players) {
+        player.lock()->join(game);
     }
 
-    this->players = players;
+    return game;
 }
 
-void Game::dealToPlayer(PlayerId player, std::vector<Card> cards) {
-    holeCards[player].addCards(cards);
-    deck.removeCards(cards);
+void Game::addPlayer(std::shared_ptr<Player> player) {
+    assert(player);
+
+    players.push_back(player);
 }
 
-void Game::dealToBoard(std::vector<Card> cards) {
-    board.addCards(cards);
-    deck.removeCards(cards);
-}
-
-void Game::dealToBoard() {
-    Card card = deck.deal();
-    board.addCard(card);
-}
-
-
-std::vector<PlayerId> Game::getWinners() {
-    std::unordered_map<PlayerId, Strength> strengths;
-
-    for (const PlayerId& player : players) {
-        strengths[player] = holeCards[player].evaluate(board);
+std::vector<PlayerId> getPlayerIds(std::vector<std::weak_ptr<Player>> players) {
+    
+    std::vector<PlayerId> playerIds;
+    for (std::weak_ptr<Player> player : players) {
+        playerIds.push_back(player.lock()->id);
     }
 
-    std::vector<PlayerId> winners;
-    for (const PlayerId& player : players) {
-        if (winners.size() == 0) {
-            winners.push_back(player);
-            continue;
-        } else if (strengths[player] > strengths[winners[0]]) {
-            winners.clear();
-            winners.push_back(player);
-        } else if (strengths[player] == strengths[winners[0]]) {
-            winners.push_back(player);
-        }
+    return playerIds;
+
+}
+
+Game::Game(std::vector<std::weak_ptr<Player>> players): tableCards(getPlayerIds(players)), playersInHand(std::make_shared<PlayersInHand>(getPlayerIds(players))),
+       bets(getPlayerIds(players), playersInHand) {
+
+    for (auto player : players) {
+        playersById[player.lock()->id] = player;
     }
 
-    return winners;
+    tableCards.startGame();
+    street = Street::PREFLOP;
+    bets.startRound(street);
+
 }
 
-void Game::shuffleDeck(std::mt19937& rng) {
-    deck.shuffle(rng);
+
+void Game::dealToNextStreet() {
+    assert(bets.bettingRoundComplete());
+
+    street = nextStreet(street);
+    bets.startRound(street);
+    tableCards.dealToStreet(street);
 }
 
-void Game::shuffleDeck() {
-    deck.shuffle();
+PlayerId Game::nextIdToAct() {
+    return bets.nextIdToAct();
 }
 
-WinningProbabilities Game::winningProbabilities(int randomSeed) {
-    WinningProbabilitiesBuilder winningProbabilitiesBuilder = WinningProbabilitiesBuilder(players);
+void Game::finish() {
+    assert(bets.bettingRoundComplete());
+    assert(street == Street::RIVER);
+    std::unique_ptr<std::unordered_map<PlayerId, int>> winnings = bets.getWinnings(tableCards);
 
-    std::mt19937 g(randomSeed);
-    // Simualate a large number of runouts
-    for (int i = 0; i < 1000; i++) {
-        // Is this even the right approach? Make a bunch of copies of the game?
-        // alternatives, run the board out several times
-        // costs -> then I need to make a function like getWinners(board)
-        // which is odd or board.getwinners(players) which is also not natural
-        Game simulatedGame = *this;
+    for (auto it = winnings->begin(); it != winnings->end(); it++) { 
 
-        // Make sure each simulated game uses a different deck
-        simulatedGame.shuffleDeck(g);
-
-        // Make a method called finished?
-        // Make a method called finish?
-        while (simulatedGame.board.size() < 5) {
-            simulatedGame.dealToBoard();
-        }
-
-        std::vector<PlayerId> winners = simulatedGame.getWinners();
-        winningProbabilitiesBuilder.addRunoutResult(winners);
+        
+        std::shared_ptr<Player> player = playersById[it->first].lock();
+        player->addChips(it->second);
     }
-
-    return winningProbabilitiesBuilder.winningProbabilities();
 }
+
+void Game::check(PlayerId playerId) {
+    bets.check(playerId);
+}
+
+int Game::call(PlayerId playerId) {
+    return bets.call(playerId);
+}
+
+void Game::raise(PlayerId playerId, int amount) {
+    bets.raise(playerId, amount);
+}
+void Game::reraise(PlayerId playerId, int amount) {
+    bets.reraise(playerId, amount);
+}
+
+void Game::allIn(PlayerId playerId, int amount) {
+    bets.allIn(playerId, amount);
+}
+
 
 
 

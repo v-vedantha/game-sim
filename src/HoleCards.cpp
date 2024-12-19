@@ -24,6 +24,13 @@ void HoleCards::addCard(Card card) {
     this->cards.push_back(card);
 }
 
+void HoleCards::dealCards(Deck& deck) {
+    while (this->cards.size() < 2) {
+        Card card = deck.deal();
+        this->cards.push_back(card);
+    }
+}
+
 Strength HoleCards::evaluate(Board& board) {
     std::vector<Card> allCards;
     for (const Card& card : this->cards) {
