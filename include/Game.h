@@ -11,8 +11,6 @@ class Game {
 
 public:
 
-    void addPlayer(std::shared_ptr<Player> player);
-
     void finish();
 
 

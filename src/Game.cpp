@@ -18,11 +18,6 @@ std::shared_ptr<Game> GameBuilder::build() {
     return game;
 }
 
-void Game::addPlayer(std::shared_ptr<Player> player) {
-    assert(player);
-
-    players.push_back(player);
-}
 
 std::vector<PlayerId> getPlayerIds(std::vector<std::weak_ptr<Player>> players) {
     
