@@ -10,7 +10,6 @@ public:
     void removeCards(std::vector<Card> cards);
     void removeCard(Card cards);
     Card deal();
-    void shuffle();
     void shuffle(std::mt19937& rng);
 
 private:

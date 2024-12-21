@@ -11,8 +11,8 @@ TableCards::TableCards(std::vector<PlayerId> players) {
     this->players = players;
 }
 
-void TableCards::startGame() {
-    shuffleDeck();
+void TableCards::startGame(std::mt19937& rng) {
+    shuffleDeck(rng);
     for (const PlayerId& player : players) {
         holeCards[player].dealCards(deck);
     }
@@ -68,14 +68,9 @@ void TableCards::shuffleDeck(std::mt19937& rng) {
     deck.shuffle(rng);
 }
 
-void TableCards::shuffleDeck() {
-    deck.shuffle();
-}
-
-WinningProbabilities TableCards::winningProbabilities(int randomSeed) {
+WinningProbabilities TableCards::winningProbabilities(std::mt19937& rng) {
     WinningProbabilitiesBuilder winningProbabilitiesBuilder = WinningProbabilitiesBuilder(players);
 
-    std::mt19937 g(randomSeed);
     // Simualate a large number of runouts
     for (int i = 0; i < 1000; i++) {
         // Is this even the right approach? Make a bunch of copies of the game?
@@ -85,7 +80,7 @@ WinningProbabilities TableCards::winningProbabilities(int randomSeed) {
         TableCards simulatedTableCards = *this;
 
         // Make sure each simulated game uses a different deck
-        simulatedTableCards.shuffleDeck(g);
+        simulatedTableCards.shuffleDeck(rng);
 
         // Make a method called finished?
         // Make a method called finish?

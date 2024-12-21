@@ -10,14 +10,13 @@ class TableCards {
 public:
     TableCards(std::vector<PlayerId> players);
 
-    void startGame();
+    void startGame(std::mt19937& rng);
 
     void dealToStreet(Street street);
 
-    void shuffleDeck();
     void shuffleDeck(std::mt19937& rng);
 
-    WinningProbabilities winningProbabilities(int randomSeed);    
+    WinningProbabilities winningProbabilities(std::mt19937& rng);    
     std::vector<PlayerId> getWinners();
     std::vector<PlayerId> getWinners(const std::vector<PlayerId>& eligiblePlayers);
 

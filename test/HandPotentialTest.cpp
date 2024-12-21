@@ -7,12 +7,13 @@
 #include "TestUtils.h"
 
 TEST(HandPotentialTest, Set) {
+    std::mt19937 rng(42);
     HoleCards holeCards = HoleCards({Card(Value::TEN, Suit::HEARTS), Card(Value::TEN, Suit::DIAMONDS)});
 
     Board board = Board();
 
     Street street = Street::FLOP;
-    Potential potential = holeCards.evaluatePotential(board, street, 42);
+    Potential potential = holeCards.evaluatePotential(board, street, rng);
 
     Rank targetRank = Rank::THREE_OF_A_KIND;
     std::cout << potential.oddsOfHitting(targetRank) << std::endl;

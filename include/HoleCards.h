@@ -5,7 +5,7 @@
 #include "Deck.h"
 #include "Strength.h"
 
-// HoleCards represents thw two cards each player has.
+// HoleCards represents the two cards each player has.
 
 class HoleCards {
 public:
@@ -19,7 +19,7 @@ public:
 
     Strength evaluate(Board& board);
 
-    Potential evaluatePotential(Board& board, Street& street, int randomSeed);
+    Potential evaluatePotential(Board& board, Street& street, std::mt19937& rng);
 private:
     std::vector<Card> cards;
 };

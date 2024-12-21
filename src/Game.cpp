@@ -5,12 +5,16 @@
 #include <iostream>
 #include <vector>
 
+GameBuilder::GameBuilder(std::shared_ptr<std::mt19937> rng) {
+    this->m_rng = rng;
+
+}
 void GameBuilder::addPlayer(std::shared_ptr<Player> player) {
     this->players.push_back(player);
 }
 
 std::shared_ptr<Game> GameBuilder::build() {
-    std::shared_ptr<Game> game = std::make_shared<Game>(players);
+    std::shared_ptr<Game> game = std::make_shared<Game>(players, *m_rng);
     for (std::weak_ptr<Player>& player : players) {
         player.lock()->join(game);
     }
@@ -30,14 +34,14 @@ std::vector<PlayerId> getPlayerIds(std::vector<std::weak_ptr<Player>> players) {
 
 }
 
-Game::Game(std::vector<std::weak_ptr<Player>> players): tableCards(getPlayerIds(players)), playersInHand(std::make_shared<PlayersInHand>(getPlayerIds(players))),
+Game::Game(std::vector<std::weak_ptr<Player>> players, std::mt19937& rng): tableCards(getPlayerIds(players)), playersInHand(std::make_shared<PlayersInHand>(getPlayerIds(players))),
        bets(getPlayerIds(players), playersInHand) {
 
     for (auto player : players) {
         playersById[player.lock()->id] = player;
     }
 
-    tableCards.startGame();
+    tableCards.startGame(rng);
     street = Street::PREFLOP;
     bets.startRound(street);
 

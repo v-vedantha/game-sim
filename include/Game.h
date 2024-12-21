@@ -27,7 +27,7 @@ public:
     void allIn(PlayerId playerId, int amount);
 
 
-    Game(std::vector<std::weak_ptr<Player>> players);
+    Game(std::vector<std::weak_ptr<Player>> players, std::mt19937& rng);
 
 private:
     std::vector<std::weak_ptr<Player>> players;
@@ -46,8 +46,10 @@ private:
 
 class GameBuilder {
 public:
+    GameBuilder(std::shared_ptr<std::mt19937> rng);
     void addPlayer(std::shared_ptr<Player> player);
     std::shared_ptr<Game> build();
 private:
+    std::shared_ptr<std::mt19937> m_rng;
     std::vector<std::weak_ptr<Player>> players;
 };

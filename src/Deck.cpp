@@ -11,12 +11,6 @@ Deck::Deck() {
     }
 }
 
-void Deck::shuffle() {
-    std::random_device rd;
-    std::mt19937 rng(rd());
-    shuffle(rng);
-}
-
 void Deck::shuffle(std::mt19937& rng) {
     std::vector<Card> cardsVec = std::vector<Card>(this->cards.begin(), this->cards.end());
     std::shuffle(cardsVec.begin(), cardsVec.end(), rng);

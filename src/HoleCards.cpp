@@ -56,8 +56,7 @@ Strength HoleCards::evaluate(Board& board) {
     return strongest;
 }
 
-Potential HoleCards::evaluatePotential(Board& board, Street& street, int randomSeed) {
-    std::mt19937 g(randomSeed);
+Potential HoleCards::evaluatePotential(Board& board, Street& street, std::mt19937& rng) {
 
     Deck deck;
     deck.removeCards(cards);
@@ -69,7 +68,7 @@ Potential HoleCards::evaluatePotential(Board& board, Street& street, int randomS
         Deck deckCopy = deck;
         Board boardCopy = board;
 
-        deckCopy.shuffle(g);
+        deckCopy.shuffle(rng);
         boardCopy.dealToStreet(deckCopy, street);
 
         Strength strengthOfRunout = evaluate(boardCopy);

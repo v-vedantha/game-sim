@@ -6,10 +6,11 @@
 #include "Game.h"
 
 TEST(FullTableCardsTest, Showdown) {
+    std::shared_ptr<std::mt19937> rng = std::make_shared<std::mt19937>(45);
     std::shared_ptr<Player> p1 = std::make_shared<Player>(PlayerId("P1"), 20);
     std::shared_ptr<Player> p2 = std::make_shared<Player>(PlayerId("P2"), 20);
 
-    GameBuilder builder;
+    GameBuilder builder(rng);
     builder.addPlayer(p1);
     builder.addPlayer(p2);
 
