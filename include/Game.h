@@ -1,18 +1,16 @@
 #pragma once
+#include "Bets.h"
 #include "PlayerId.h"
 #include "TableCards.h"
-#include "Bets.h"
-#include <memory> 
 #include <map>
+#include <memory>
 
 class Player;
 
 class Game {
 
-public:
-
+  public:
     void finish();
-
 
     void dealToNextStreet();
 
@@ -21,35 +19,28 @@ public:
     // Should always match nextIdToAct so technically unnecessary
     // but it is useful to be confident that the game is in a consistent state.
     void check(PlayerId playerId);
-    int call(PlayerId playerId);
-    void raise(PlayerId playerId, int amount);
-    void reraise(PlayerId playerId, int amount);
-    void allIn(PlayerId playerId, int amount);
+    void call(PlayerId playerId);
+    void raiseTo(PlayerId playerId, int amount);
+    void allIn(PlayerId playerId);
 
+    int stack(PlayerId playerId);
 
-    Game(std::vector<std::weak_ptr<Player>> players, std::mt19937& rng);
+    Game(std::vector<PlayerId> playerIds,
+         std::shared_ptr<std::unordered_map<PlayerId, int>> chips,
+         std::mt19937 &rng);
 
-private:
-    std::vector<std::weak_ptr<Player>> players;
+  private:
+    std::vector<std::weak_ptr<PlayerId>> players;
 
-    std::unordered_map<PlayerId, std::weak_ptr<Player>> playersById;
     TableCards tableCards;
 
-    // Game owns playersInHand
+    // Game owns playersInHand. Bets stores an additional reference
     std::shared_ptr<PlayersInHand> playersInHand;
+
+    // Game owns, bets stores additional reference.
+    std::shared_ptr<std::unordered_map<PlayerId, int>> chipStacks;
 
     Bets bets;
 
     Street street;
-
-};
-
-class GameBuilder {
-public:
-    GameBuilder(std::shared_ptr<std::mt19937> rng);
-    void addPlayer(std::shared_ptr<Player> player);
-    std::shared_ptr<Game> build();
-private:
-    std::shared_ptr<std::mt19937> m_rng;
-    std::vector<std::weak_ptr<Player>> players;
 };

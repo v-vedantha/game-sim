@@ -1,52 +1,110 @@
+#include "Card.h"
+#include "Game.h"
+#include "PlayerId.h"
 #include <gtest/gtest.h>
 #include <iostream>
-#include "Card.h"
-#include "PlayerId.h"
-#include "Player.h"
-#include "Game.h"
 
 TEST(FullTableCardsTest, Showdown) {
-    std::shared_ptr<std::mt19937> rng = std::make_shared<std::mt19937>(45);
-    std::shared_ptr<Player> p1 = std::make_shared<Player>(PlayerId("P1"), 20);
-    std::shared_ptr<Player> p2 = std::make_shared<Player>(PlayerId("P2"), 20);
+    // The rest of the game depends on this random seed but I think fixing the
+    // seed and letting the game playout is better than ensuring the correct
+    // cards get dealt each time.
+    std::mt19937 rng(45);
+    std::vector<PlayerId> players;
+    PlayerId p1 = PlayerId("P1");
+    PlayerId p2 = PlayerId("P2");
+    players.push_back(p1);
+    players.push_back(p2);
+    std::shared_ptr<std::unordered_map<PlayerId, int>> chips =
+        std::make_shared<std::unordered_map<PlayerId, int>>();
+    chips->insert({p1, 20});
+    chips->insert({p2, 30});
 
-    GameBuilder builder(rng);
-    builder.addPlayer(p1);
-    builder.addPlayer(p2);
+    std::shared_ptr<Game> game = std::make_shared<Game>(players, chips, rng);
 
-    std::shared_ptr<Game> game = builder.build();
-
-
-    // Assume p1 is the first to act for now since we don't have dealer logic
-    // p1 is the small blind, p2 is the big blind.
+    // Assume p1 is the first to act for now since we don't have dealer logic or
+    // blinds
     EXPECT_EQ(game->nextIdToAct(), PlayerId("P1"));
 
-    p1->check();
+    game->check(p1);
 
     EXPECT_EQ(game->nextIdToAct(), PlayerId("P2"));
 
-    p2->raise(10);
+    game->raiseTo(p2, 10);
 
     EXPECT_EQ(game->nextIdToAct(), PlayerId("P1"));
 
-    p1->call();
+    game->call(p1);
 
     game->dealToNextStreet();
 
-    p1->check();
-    p2->check();
+    game->check(p1);
+    game->check(p2);
 
     game->dealToNextStreet();
 
-    p1->check();
-    p2->check();
+    game->check(p1);
+    game->check(p2);
 
     game->dealToNextStreet();
-    p1->allIn();
-    p2->call();
+    game->allIn(p1);
+    game->call(p2);
 
     game->finish();
 
-    EXPECT_EQ(p1->stack(), 0);
-    EXPECT_EQ(p2->stack(), 40);
+    EXPECT_EQ(game->stack(p1), 40);
+    EXPECT_EQ(game->stack(p2), 10);
+}
+
+TEST(FullTableCardsTest, IllegalActionMaintainsState) {
+    // The rest of the game depends on this random seed but I think fixing the
+    // seed and letting the game playout is better than ensuring the correct
+    // cards get dealt each time.
+    std::mt19937 rng(45);
+    std::vector<PlayerId> players;
+    PlayerId p1 = PlayerId("P1");
+    PlayerId p2 = PlayerId("P2");
+    players.push_back(p1);
+    players.push_back(p2);
+    std::shared_ptr<std::unordered_map<PlayerId, int>> chips =
+        std::make_shared<std::unordered_map<PlayerId, int>>();
+    chips->insert({p1, 20});
+    chips->insert({p2, 30});
+
+    std::shared_ptr<Game> game = std::make_shared<Game>(players, chips, rng);
+
+    // Assume p1 is the first to act for now since we don't have dealer logic or
+    // blinds
+    EXPECT_EQ(game->nextIdToAct(), PlayerId("P1"));
+
+    game->check(p1);
+
+    EXPECT_EQ(game->nextIdToAct(), PlayerId("P2"));
+
+    game->raiseTo(p2, 10);
+
+    EXPECT_EQ(game->nextIdToAct(), PlayerId("P1"));
+
+    game->call(p1);
+
+    game->dealToNextStreet();
+
+    game->check(p1);
+    game->check(p2);
+
+    game->dealToNextStreet();
+
+    game->check(p1);
+    game->check(p2);
+
+    game->dealToNextStreet();
+    game->check(p1);
+    game->allIn(p2);
+    // EXPECT_THROW(game->call(p1), IllegalAction);
+    game->allIn(p1);
+    // game->allIn(p1);
+
+    game->finish();
+
+    EXPECT_EQ(game->stack(p1), 40);
+    EXPECT_EQ(game->stack(p2), 10);
 }

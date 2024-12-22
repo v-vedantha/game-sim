@@ -25,7 +25,6 @@ add_library(PokerLib src/Bets.cpp
                      src/Game.cpp
                      src/Hand.cpp
                      src/HoleCards.cpp
-                     src/Player.cpp
                      src/PlayerId.cpp
                      src/PlayersInHand.cpp
                      src/Pot.cpp

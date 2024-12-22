@@ -19,12 +19,14 @@ void PlayersInHand::removeCurrentPlayerFromBetting() {
 }
 
 void PlayersInHand::advanceCurrentPlayer() {
-    if (currentPlayer == lastPlayer) {
-        m_isBettingOver = true;
-    }
     do {
+        if (currentPlayer == lastPlayer) {
+            m_isBettingOver = true;
+            break;
+        }
         currentPlayer = (currentPlayer + 1) % playersInHand.size();
-    } while (playersWhoCanBet.find(playersInHand[currentPlayer]) == playersWhoCanBet.end());
+    } while (playersWhoCanBet.find(playersInHand[currentPlayer]) ==
+             playersWhoCanBet.end());
 }
 
 void PlayersInHand::everyoneCanAct() {
@@ -34,9 +36,7 @@ void PlayersInHand::everyoneCanAct() {
     }
 }
 
-PlayerId PlayersInHand::nextIdToAct() {
-    return playersInHand[currentPlayer];
-}
+PlayerId PlayersInHand::nextIdToAct() { return playersInHand[currentPlayer]; }
 
 void PlayersInHand::removeCurrentPlayerFromHand() {
     playersInHand.erase(playersInHand.begin() + currentPlayer);
@@ -46,7 +46,4 @@ std::vector<PlayerId> PlayersInHand::getPlayersStillInHand() {
     return playersInHand;
 }
 
-bool PlayersInHand::isBettingOver() {
-    return m_isBettingOver;
-}
-
+bool PlayersInHand::isBettingOver() { return m_isBettingOver; }

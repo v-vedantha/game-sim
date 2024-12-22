@@ -1,22 +1,25 @@
 #pragma once
+#include "Board.h"
 #include "PlayerId.h"
-#include "TableCards.h"
 #include "PlayersInHand.h"
-#include <memory>
+#include "TableCards.h"
 #include <map>
+#include <memory>
 #include <vector>
 
 class Pot {
 
-
-public:
+  public:
     Pot(std::vector<PlayerId> playerIds);
 
+    void startRound(Street street);
     void add(PlayerId playerId, int amount);
+    int amountPutIn(PlayerId playerId);
 
-    std::unique_ptr<std::unordered_map<PlayerId, int>> getWinnings(TableCards& tableCards, PlayersInHand& playersInHand);
+    std::unique_ptr<std::unordered_map<PlayerId, int>>
+    getWinnings(TableCards &tableCards, PlayersInHand &playersInHand);
 
-private:
-    bool isEmpty();
-    std::unordered_map<PlayerId, int> amountsPutIn;
+  private:
+    Street street;
+    std::unordered_map<Street, std::unordered_map<PlayerId, int>> amountsPutIn;
 };

@@ -1,52 +1,21 @@
 #include "Game.h"
-#include "Player.h"
-#include <memory>
 #include <cassert>
 #include <iostream>
+#include <memory>
 #include <vector>
 
-GameBuilder::GameBuilder(std::shared_ptr<std::mt19937> rng) {
-    this->m_rng = rng;
+Game::Game(std::vector<PlayerId> playerIds,
+           std::shared_ptr<std::unordered_map<PlayerId, int>> chips,
+           std::mt19937 &rng)
+    : tableCards(playerIds),
+      playersInHand(std::make_shared<PlayersInHand>(playerIds)),
+      bets(playerIds, playersInHand) {
 
-}
-void GameBuilder::addPlayer(std::shared_ptr<Player> player) {
-    this->players.push_back(player);
-}
-
-std::shared_ptr<Game> GameBuilder::build() {
-    std::shared_ptr<Game> game = std::make_shared<Game>(players, *m_rng);
-    for (std::weak_ptr<Player>& player : players) {
-        player.lock()->join(game);
-    }
-
-    return game;
-}
-
-
-std::vector<PlayerId> getPlayerIds(std::vector<std::weak_ptr<Player>> players) {
-    
-    std::vector<PlayerId> playerIds;
-    for (std::weak_ptr<Player> player : players) {
-        playerIds.push_back(player.lock()->id);
-    }
-
-    return playerIds;
-
-}
-
-Game::Game(std::vector<std::weak_ptr<Player>> players, std::mt19937& rng): tableCards(getPlayerIds(players)), playersInHand(std::make_shared<PlayersInHand>(getPlayerIds(players))),
-       bets(getPlayerIds(players), playersInHand) {
-
-    for (auto player : players) {
-        playersById[player.lock()->id] = player;
-    }
-
+    this->chipStacks = chips;
     tableCards.startGame(rng);
     street = Street::PREFLOP;
     bets.startRound(street);
-
 }
-
 
 void Game::dealToNextStreet() {
     assert(bets.bettingRoundComplete());
@@ -56,42 +25,49 @@ void Game::dealToNextStreet() {
     tableCards.dealToStreet(street);
 }
 
-PlayerId Game::nextIdToAct() {
-    return bets.nextIdToAct();
-}
+PlayerId Game::nextIdToAct() { return bets.nextIdToAct(); }
 
 void Game::finish() {
     assert(bets.bettingRoundComplete());
     assert(street == Street::RIVER);
-    std::unique_ptr<std::unordered_map<PlayerId, int>> winnings = bets.getWinnings(tableCards);
+    std::unique_ptr<std::unordered_map<PlayerId, int>> winnings =
+        bets.getWinnings(tableCards);
 
-    for (auto it = winnings->begin(); it != winnings->end(); it++) { 
-
-        
-        std::shared_ptr<Player> player = playersById[it->first].lock();
-        player->addChips(it->second);
+    // Update the chip stacks with the winnings
+    for (auto it = winnings->begin(); it != winnings->end(); it++) {
+        chipStacks->at(it->first) += it->second;
     }
 }
 
-void Game::check(PlayerId playerId) {
-    bets.check(playerId);
+void Game::check(PlayerId playerId) { bets.check(playerId); }
+
+void Game::call(PlayerId playerId) {
+    int chipsCost = bets.getCallingAmount() - bets.getAmountPutIn(playerId);
+    if (bets.getCallingAmount() - bets.getAmountPutIn(playerId) >
+        chipStacks->at(playerId)) {
+        throw IllegalAction(
+            "Cannot call a bet larger than chips left, must fold or allIn");
+    }
+
+    bets.call(playerId);
+    chipStacks->at(playerId) -= chipsCost;
 }
 
-int Game::call(PlayerId playerId) {
-    return bets.call(playerId);
+void Game::raiseTo(PlayerId playerId, int amount) {
+    int amountAdded = amount - bets.getAmountPutIn(playerId);
+    if (amount - bets.getAmountPutIn(playerId) > chipStacks->at(playerId)) {
+        throw IllegalAction("Don't have enough chips to perform this raise");
+    }
+
+    // Can also throw.
+    bets.raiseTo(playerId, amount);
+
+    chipStacks->at(playerId) -= amountAdded;
 }
 
-void Game::raise(PlayerId playerId, int amount) {
-    bets.raise(playerId, amount);
-}
-void Game::reraise(PlayerId playerId, int amount) {
-    bets.reraise(playerId, amount);
+void Game::allIn(PlayerId playerId) {
+    bets.allIn(playerId, chipStacks->at(playerId));
+    chipStacks->at(playerId) = 0;
 }
 
-void Game::allIn(PlayerId playerId, int amount) {
-    bets.allIn(playerId, amount);
-}
-
-
-
-
+int Game::stack(PlayerId playerId) { return chipStacks->at(playerId); }
