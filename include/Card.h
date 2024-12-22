@@ -2,15 +2,27 @@
 #include <string>
 #include <vector>
 
-enum class Suit {
-    SUIT_UNSPECIFIED,
-    HEARTS,
-    DIAMONDS,
-    CLUBS,
-    SPADES
-};
+/**
+ * @enum Suit
+ * @brief Represents the suit of a playing card.
+ *
+ * - `HEARTS`: The hearts suit.
+ * - `DIAMONDS`: The diamonds suit.
+ * - `CLUBS`: The clubs suit.
+ * - `SPADES`: The spades suit.
+ * - `SUIT_UNSPECIFIED`: A placeholder for an unspecified suit.
+ */
+enum class Suit { SUIT_UNSPECIFIED, HEARTS, DIAMONDS, CLUBS, SPADES };
 
-
+/**
+ * @enum Value
+ * @brief Represents the rank of a playing card.
+ *
+ * - Numeric ranks: TWO to TEN.
+ * - Face cards: JACK, QUEEN, KING.
+ * - ACE: The highest or lowest card in some games.
+ * - `VALUE_UNSPECIFIED`: A placeholder for an unspecified value.
+ */
 enum class Value {
     VALUE_UNSPECIFIED,
     TWO = 2,
@@ -28,37 +40,90 @@ enum class Value {
     ACE = 14
 };
 
+/**
+ * @brief A collection of all possible suits for a standard deck of cards.
+ */
+extern const std::vector<Suit> allSuits;
 
-extern const std::vector<Suit> allSuits; 
+/**
+ * @brief A collection of all possible values for a standard deck of cards.
+ */
 extern const std::vector<Value> allValues;
 
+/**
+ * @class Card
+ * @brief Represents a single playing card with a suit and value.
+ */
 class Card {
-public:
+  public:
+    /**
+     * @brief The suit of the card.
+     */
     Suit suit;
+
+    /**
+     * @brief The value of the card.
+     */
     Value value;
 
+    /**
+     * @brief Constructs a card with a specified value and suit.
+     *
+     * @param value The rank of the card.
+     * @param suit The suit of the card.
+     */
     Card(Value value, Suit suit);
+
+    /**
+     * @brief Constructs an unspecified card.
+     */
     Card();
 
-    bool operator==(const Card& other) const {
+    /**
+     * @brief Compares two cards for equality.
+     *
+     * Two cards are equal if they have the same suit and value.
+     *
+     * @param other The other card to compare against.
+     * @return True if the cards are equal, false otherwise.
+     */
+    bool operator==(const Card &other) const {
         return this->suit == other.suit && this->value == other.value;
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const Card& card);
-
+    friend std::ostream &operator<<(std::ostream &os, const Card &card);
 };
 
-std::ostream& operator<<(std::ostream& os, const Card& card);
-std::ostream& operator<<(std::ostream& os, const Value& value);
-std::ostream& operator<<(std::ostream& os, const Suit& suit);
+std::ostream &operator<<(std::ostream &os, const Card &card);
 
+std::ostream &operator<<(std::ostream &os, const Value &value);
+
+std::ostream &operator<<(std::ostream &os, const Suit &suit);
+
+/**
+ * @struct CardComparator
+ * @brief A comparator for sorting cards in ascending order based on their
+ * value.
+ */
 struct CardComparator {
-    bool operator()(const Card& c1, const Card& c2) const;
+    bool operator()(const Card &c1, const Card &c2) const;
 };
 
+/**
+ * @struct CardReverseComparator
+ * @brief A comparator for sorting cards in descending order based on their
+ * value.
+ */
 struct CardReverseComparator {
-    bool operator()(const Card& c1, const Card& c2) const;
+    bool operator()(const Card &c1, const Card &c2) const;
 };
 
-int compareValue(Value& v1, Value& v2);
-
+/**
+ * @brief Compares two card values.
+ *
+ * @param v1 The first card value.
+ * @param v2 The second card value.
+ * @return A positive number if `v1` > `v2`, 0 if they are equal, or a negative
+ * number if `v1` < `v2`.
+ */
+int compareValue(Value &v1, Value &v2);

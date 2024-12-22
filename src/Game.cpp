@@ -5,13 +5,13 @@
 #include <vector>
 
 Game::Game(std::vector<PlayerId> playerIds,
-           std::shared_ptr<std::unordered_map<PlayerId, int>> chips,
+           std::unique_ptr<std::unordered_map<PlayerId, int>> chips,
            std::mt19937 &rng)
     : tableCards(playerIds),
       playersInHand(std::make_shared<PlayersInHand>(playerIds)),
       bets(playerIds, playersInHand) {
 
-    this->chipStacks = chips;
+    this->chipStacks = std::move(chips);
     tableCards.startGame(rng);
     street = Street::PREFLOP;
     bets.startRound(street);

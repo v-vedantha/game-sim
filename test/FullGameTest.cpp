@@ -14,12 +14,13 @@ TEST(FullTableCardsTest, Showdown) {
     PlayerId p2 = PlayerId("P2");
     players.push_back(p1);
     players.push_back(p2);
-    std::shared_ptr<std::unordered_map<PlayerId, int>> chips =
-        std::make_shared<std::unordered_map<PlayerId, int>>();
+    std::unique_ptr<std::unordered_map<PlayerId, int>> chips =
+        std::make_unique<std::unordered_map<PlayerId, int>>();
     chips->insert({p1, 20});
     chips->insert({p2, 30});
 
-    std::shared_ptr<Game> game = std::make_shared<Game>(players, chips, rng);
+    std::shared_ptr<Game> game =
+        std::make_shared<Game>(players, std::move(chips), rng);
 
     // Assume p1 is the first to act for now since we don't have dealer logic or
     // blinds
@@ -65,12 +66,13 @@ TEST(FullTableCardsTest, IllegalActionMaintainsState) {
     PlayerId p2 = PlayerId("P2");
     players.push_back(p1);
     players.push_back(p2);
-    std::shared_ptr<std::unordered_map<PlayerId, int>> chips =
-        std::make_shared<std::unordered_map<PlayerId, int>>();
+    std::unique_ptr<std::unordered_map<PlayerId, int>> chips =
+        std::make_unique<std::unordered_map<PlayerId, int>>();
     chips->insert({p1, 20});
     chips->insert({p2, 30});
 
-    std::shared_ptr<Game> game = std::make_shared<Game>(players, chips, rng);
+    std::shared_ptr<Game> game =
+        std::make_shared<Game>(players, std::move(chips), rng);
 
     // Assume p1 is the first to act for now since we don't have dealer logic or
     // blinds
