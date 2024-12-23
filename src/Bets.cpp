@@ -10,6 +10,9 @@ Bets::Bets(std::vector<PlayerId> playerIds,
            std::shared_ptr<PlayersInHand> playersInHand)
     : pot(Pot(playerIds)) {
     this->playerIds = playerIds;
+
+    // Initialize on an unspecified street. This is fine because users are meant
+    // to call startRound before betting starts for each round.
     this->currentStreet = Street::STREET_UNSPECIFIED;
     this->playersInHand = playersInHand;
 }

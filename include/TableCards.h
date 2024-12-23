@@ -94,14 +94,6 @@ class TableCards {
      */
     void dealToBoard(std::vector<Card> cards);
 
-    /**
-     * @brief Only meant for testing. Deals a card to the baord.
-     *
-     * @param player
-     * @param cards
-     */
-    void dealToBoard();
-
   private:
     /**
      * @brief All the players in the hand. Meant to be set once in the
