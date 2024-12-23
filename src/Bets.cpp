@@ -12,11 +12,11 @@ Bets::Bets(std::vector<PlayerId> playerIds,
     : pot(Pot(playerIds)) {
     this->playerIds = playerIds;
     this->chipStacks = std::move(chips);
+    this->playersInHand = playersInHand;
 
     // Initialize on an unspecified street. This is fine because users are meant
     // to call startRound before betting starts for each round.
     this->currentStreet = Street::STREET_UNSPECIFIED;
-    this->playersInHand = playersInHand;
 }
 
 void Bets::startRound(Street street) {
@@ -28,22 +28,26 @@ void Bets::startRound(Street street) {
 }
 
 void Bets::call(PlayerId playerId) {
+    // Ensure that the player called startRound for this street.
     assert(bettingRounds.find(currentStreet) != bettingRounds.end());
-    int size =
-        bettingRounds[currentStreet]->currentBet() - pot.amountPutIn(playerId);
-    if (size > chipStacks->at(playerId)) {
+
+    int callingCost = bettingRounds[currentStreet]->currentBet() -
+                      pot.amountBet(currentStreet, playerId);
+    if (callingCost > chipStacks->at(playerId)) {
         throw IllegalAction(
             "Cannot call a bet larger than chips left, must fold or allIn");
     }
-    pot.add(playerId, size);
+    pot.add(playerId, callingCost);
 
-    chipStacks->at(playerId) -= size;
+    chipStacks->at(playerId) -= callingCost;
     playersInHand->advanceCurrentPlayer();
 }
 
 void Bets::check(PlayerId playerId) {
 
-    if (pot.amountPutIn(playerId) !=
+    // You can only check if you don't need to put in money to stay in the
+    // round.
+    if (pot.amountBet(currentStreet, playerId) !=
         bettingRounds[currentStreet]->currentBet()) {
         throw IllegalAction("Cannot check if we need to put money in.");
     }
@@ -55,29 +59,32 @@ void Bets::fold(PlayerId playerId) {
 }
 
 void Bets::raiseTo(PlayerId playerId, int amount) {
+    // You must raise to atleast 2x the current bet.
     if (amount < 2 * bettingRounds[currentStreet]->currentBet()) {
         throw IllegalAction("Must raise by atleast the current bet.");
     }
-    int amountAdded = amount - pot.amountPutIn(playerId);
-    if (amountAdded > chipStacks->at(playerId)) {
+    int raiseCost = amount - pot.amountBet(currentStreet, playerId);
+    if (raiseCost > chipStacks->at(playerId)) {
         throw IllegalAction("Don't have enough chips to perform this raise");
     }
     bettingRounds[currentStreet]->raiseTo(amount);
 
-    pot.add(playerId, amountAdded);
-    chipStacks->at(playerId) -= amountAdded;
+    pot.add(playerId, raiseCost);
+    chipStacks->at(playerId) -= raiseCost;
 
     playersInHand->everyoneCanAct();
     playersInHand->advanceCurrentPlayer();
 }
 
 void Bets::allIn(PlayerId playerId) {
-    int amount = chipStacks->at(playerId);
-    if (amount > bettingRounds[currentStreet]->currentBet()) {
+    int remainingChips = chipStacks->at(playerId);
+    int allInTotalChips =
+        pot.amountBet(currentStreet, playerId) + remainingChips;
+    if (allInTotalChips > bettingRounds[currentStreet]->currentBet()) {
         playersInHand->everyoneCanAct();
     }
-    pot.add(playerId, amount);
-    bettingRounds[currentStreet]->allInTo(pot.amountPutIn(playerId) + amount);
+    pot.add(playerId, remainingChips);
+    bettingRounds[currentStreet]->allInTo(allInTotalChips);
     chipStacks->at(playerId) = 0;
 
     playersInHand->removeCurrentPlayerFromBetting();

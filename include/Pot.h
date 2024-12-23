@@ -49,12 +49,12 @@ class Pot {
 
     /**
      * @brief Retrieves the total amount of chips a player has contributed to
-     * the pot for the current street.
+     * the pot for the given street.
      *
      * @param playerId The ID of the player.
      * @return The total amount the player has put in during the current street.
      */
-    int amountPutIn(PlayerId playerId);
+    int amountBet(Street street, PlayerId playerId);
 
     /**
      * @brief Calculates and retrieves the distribution of winnings based on the

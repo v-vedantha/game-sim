@@ -16,7 +16,7 @@ void Pot::add(PlayerId playerId, int amount) {
     amountsPutIn[street][playerId] += amount;
 }
 
-int Pot::amountPutIn(PlayerId playerId) {
+int Pot::amountBet(Street street, PlayerId playerId) {
     return amountsPutIn[street][playerId];
 }
 
