@@ -2,7 +2,9 @@
 #include <cassert>
 #include <iostream>
 
-std::vector<std::vector<Card>> generateCombinations(std::vector<Card> cards, uint32_t numToChoose, uint32_t startIdx) {
+std::vector<std::vector<Card>> generateCombinations(std::vector<Card> cards,
+                                                    uint32_t numToChoose,
+                                                    uint32_t startIdx) {
     if (numToChoose == 0) {
         return {};
     }
@@ -15,23 +17,23 @@ std::vector<std::vector<Card>> generateCombinations(std::vector<Card> cards, uin
         return {remainingCards};
     }
 
-
-    // Assume the first card is either selected or not selected
-    std::vector<std::vector<Card>> withFirstCard = generateCombinations(cards, numToChoose-1, startIdx + 1);
-    
+    std::vector<std::vector<Card>> withFirstCard =
+        generateCombinations(cards, numToChoose - 1, startIdx + 1);
     for (auto it = withFirstCard.begin(); it != withFirstCard.end(); it++) {
         it->push_back(cards[startIdx]);
     }
-    std::vector<std::vector<Card>> withoutFirstCard = generateCombinations(cards, numToChoose, startIdx + 1);
 
-    withFirstCard.insert(withFirstCard.end(), withoutFirstCard.begin(), withoutFirstCard.end());
+    std::vector<std::vector<Card>> withoutFirstCard =
+        generateCombinations(cards, numToChoose, startIdx + 1);
+
+    withFirstCard.insert(withFirstCard.end(), withoutFirstCard.begin(),
+                         withoutFirstCard.end());
 
     return withFirstCard;
-
 }
 
-std::vector<std::vector<Card>> generateCombinations(std::vector<Card> cards, uint32_t numToChoose) {
+std::vector<std::vector<Card>> generateCombinations(std::vector<Card> cards,
+                                                    uint32_t numToChoose) {
 
     return generateCombinations(cards, numToChoose, 0);
 }
- 
