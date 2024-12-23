@@ -38,7 +38,7 @@ Street nextStreet(Street street);
  */
 class Board {
     /**
-     * @brief A vector of cards currently on the board.
+     * @brief The cards currently on the board.
      */
     std::vector<Card> cards;
 
@@ -66,7 +66,7 @@ class Board {
     /**
      * @brief Adds multiple cards to the board.
      *
-     * @param cards A vector of cards to add.
+     * @param cards The cards to add.
      */
     void addCards(std::vector<Card> cards);
 
