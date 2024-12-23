@@ -13,5 +13,5 @@
  * @return std::vector<std::vector<Card>> Vector of length cards.size() Choose
  * numToChoose
  */
-std::vector<std::vector<Card>> generateCombinations(std::vector<Card> cards,
-                                                    uint32_t numToChoose);
+std::vector<std::vector<Card>>
+generateCombinations(const std::vector<Card> &cards, uint32_t numToChoose);

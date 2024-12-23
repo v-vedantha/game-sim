@@ -80,6 +80,8 @@ void Bets::allIn(PlayerId playerId) {
     int remainingChips = chipStacks->at(playerId);
     int allInTotalChips =
         pot.amountBet(currentStreet, playerId) + remainingChips;
+
+    // If going all in also happens to be a raise, then everyone can act.
     if (allInTotalChips > bettingRounds[currentStreet]->currentBet()) {
         playersInHand->everyoneCanAct();
     }
