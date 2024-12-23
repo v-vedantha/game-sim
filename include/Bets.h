@@ -43,9 +43,6 @@ class IllegalAction : public std::exception {
  *
  * This class handles player bets, updates the pot, validates actions, and
  * provides information about the betting state for game management.
- *
- * This class does not manage the player's chipstacks outside of what they have
- * put into the pot
  */
 class Bets {
 
@@ -58,7 +55,8 @@ class Bets {
      * player turns.
      */
     Bets(std::vector<PlayerId> playerIds,
-         std::shared_ptr<PlayersInHand> playersInHand);
+         std::shared_ptr<PlayersInHand> playersInHand,
+         std::unique_ptr<std::unordered_map<PlayerId, int>> chipStacks);
 
     /**
      * @brief Starts a new betting round for a given street.
@@ -116,9 +114,8 @@ class Bets {
      * remaining chips into the pot and updating the game state.
      *
      * @param playerId The ID of the player going all-in.
-     * @param amount The total amount the player is betting.
      */
-    void allIn(PlayerId playerId, int amount);
+    void allIn(PlayerId playerId);
 
     /**
      * @brief Gets the amount required to call the current bet. The amount a
@@ -146,15 +143,20 @@ class Bets {
     bool bettingRoundComplete();
 
     /**
-     * @brief Calculates and retrieves the winnings for the current pot based on
-     * the table cards.
+     * @brief Distribute winnings to their respective players.
      *
-     * @param tableCards The community cards on the table.
-     * @return A unique pointer to an unordered map of player IDs to their
-     * respective winnings.
+     * @param tableCards All the cards in the game. Used to determine who wins
+     * the hand
      */
-    std::unique_ptr<std::unordered_map<PlayerId, int>>
-    getWinnings(TableCards &tableCards);
+    void distributeWinnings(TableCards &tableCards);
+
+    /**
+     * @brief Gets the stack of a particular player.
+     *
+     * @param playerId The player
+     * @return int     Their stack
+     */
+    int stack(PlayerId playerId);
 
   private:
     /**
@@ -177,6 +179,13 @@ class Bets {
      * @brief A map of betting rounds, keyed by street.
      */
     std::unordered_map<Street, std::unique_ptr<BettingRound>> bettingRounds;
+
+    /**
+     * @brief The chipStacks each player has remaining (excludes bets placed
+     * into the pot)
+     *
+     */
+    std::unique_ptr<std::unordered_map<PlayerId, int>> chipStacks;
 
     /**
      * @brief The pot that accumulates all bets made by players.

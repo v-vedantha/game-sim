@@ -29,7 +29,7 @@ class BettingRound {
      *
      * @param amount The total amount the player is going all-in with.
      */
-    void allIn(int amount);
+    void allInTo(int amount);
 
     /**
      * @brief Retrieves the current bet for the round.

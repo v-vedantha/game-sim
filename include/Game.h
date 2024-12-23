@@ -102,9 +102,6 @@ class Game {
     // Game owns playersInHand. Bets stores an additional reference
     std::shared_ptr<PlayersInHand> playersInHand;
 
-    // Game owns, bets stores additional reference.
-    std::unique_ptr<std::unordered_map<PlayerId, int>> chipStacks;
-
     Bets bets;
 
     Street street;
