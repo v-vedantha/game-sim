@@ -16,7 +16,7 @@ double WinningProbabilities::getProbabilityOfWinning(PlayerId player) {
 
 WinningProbabilitiesBuilder::WinningProbabilitiesBuilder(
     std::vector<PlayerId> players) {
-    // Initially none of the players ever have any winning runouts.
+    // Initially none of the players have won any runouts.
     for (const PlayerId &player : players) {
         this->winningRunouts[player] = 0;
     }

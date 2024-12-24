@@ -5,7 +5,7 @@
 #include <map>
 
 PotentialBuilder::PotentialBuilder() {
-    // Initially none of the ranks can ever be constructed.
+    // Initially no runouts are simulated
     for (Rank rank : allRanks) {
         numRunoutsWithRank[rank] = 0;
     }
