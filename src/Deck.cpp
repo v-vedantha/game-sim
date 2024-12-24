@@ -4,6 +4,7 @@
 #include <random>
 
 Deck::Deck() {
+    // Build the deck using all 52 possible cards.
     for (Suit suit : allSuits) {
         for (Value value : allValues) {
             this->cards.push_back(Card(value, suit));
