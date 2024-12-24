@@ -77,7 +77,7 @@ class Board {
      * @param street The street to deal to, which determines how many cards are
      * dealt.
      */
-    void dealToStreet(Deck &deck, Street &street);
+    void dealToStreet(Deck &deck, Street street);
 
     /**
      * @brief Retrieves the number of cards currently on the board.

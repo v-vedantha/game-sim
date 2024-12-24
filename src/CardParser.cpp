@@ -1,26 +1,28 @@
-#include <iostream>
 #include <format>
+#include <iostream>
 
 #include "Card.h"
 #include "CardParser.h"
 
-ParseFailed::ParseFailed(std::string message) {
-    this->message = message;
-}
+ParseFailed::ParseFailed(std::string message) { this->message = message; }
 
-const char* ParseFailed::what() const throw() {
-    return message.c_str();
-}
+const char *ParseFailed::what() const throw() { return message.c_str(); }
 
 class TokenStream {
     std::string input;
     size_t currentTokenIdx;
-public:
+
+  public:
     TokenStream(std::string input) {
         this->input = input;
         this->currentTokenIdx = 0;
     }
 
+    /**
+     * @brief See the next token without consuming it.
+     *
+     * @return char The next token
+     */
     char peek() {
         if (currentTokenIdx >= input.length()) {
             throw ParseFailed("Unexpected end of input");
@@ -28,6 +30,13 @@ public:
         return input[currentTokenIdx];
     }
 
+    /**
+     * @brief Peek nth tokens ahead without consuming it
+     *
+     * @param n  the number of tokens to look ahead
+     * @throw ParseFailed if there are not enough tokens to look n ahead
+     * @return char The token n tokens ahead, if it exists
+     */
     char peek(int n) {
         if (currentTokenIdx + n >= input.length()) {
             throw ParseFailed("Unexpected end of input");
@@ -35,6 +44,11 @@ public:
         return input[currentTokenIdx + n];
     }
 
+    /**
+     * @brief Consumes the next token, returning it
+     *
+     * @return char The next token
+     */
     char consume() {
         if (currentTokenIdx >= input.length()) {
             throw ParseFailed("Unexpected end of input");
@@ -42,92 +56,96 @@ public:
         return input[currentTokenIdx++];
     }
 
-    bool hasNext() {
-        return currentTokenIdx < input.length();
-    }
+    /**
+     * @brief Returns whether there are any additional tokens in the stream
+     *
+     * @return true There are more tokens in the stream
+     * @return false The stream is exhausted. No tokens left.
+     */
+    bool hasNext() { return currentTokenIdx < input.length(); }
 };
 
-
-
-Suit parseSuit(TokenStream& stream) {
+Suit parseSuit(TokenStream &stream) {
     char suit = stream.consume();
     switch (suit) {
-        case 'H':
-            return Suit::HEARTS;
-        case 'D':
-            return Suit::DIAMONDS;
-        case 'C':
-            return Suit::CLUBS;
-        case 'S':
-            return Suit::SPADES;
-        case 'h':
-            return Suit::HEARTS;
-        case 'd':
-            return Suit::DIAMONDS;
-        case 'c':
-            return Suit::CLUBS;
-        case 's':
-            return Suit::SPADES;
-        default:
-            throw ParseFailed(std::format("Invalid suit: Got {} Expected H, D, C, S (or lower case)", suit));
+    case 'H':
+        return Suit::HEARTS;
+    case 'D':
+        return Suit::DIAMONDS;
+    case 'C':
+        return Suit::CLUBS;
+    case 'S':
+        return Suit::SPADES;
+    case 'h':
+        return Suit::HEARTS;
+    case 'd':
+        return Suit::DIAMONDS;
+    case 'c':
+        return Suit::CLUBS;
+    case 's':
+        return Suit::SPADES;
+    default:
+        throw ParseFailed(std::format(
+            "Invalid suit: Got {} Expected H, D, C, S (or lower case)", suit));
     }
 }
 
-Value parseValue(TokenStream& stream) {
+Value parseValue(TokenStream &stream) {
     char firstChar = stream.consume();
     switch (firstChar) {
-        case '2':
-            return Value::TWO;
-        case '3':
-            return Value::THREE;
-        case '4':
-            return Value::FOUR;
-        case '5':
-            return Value::FIVE;
-        case '6':
-            return Value::SIX;
-        case '7':
-            return Value::SEVEN;
-        case '8':
-            return Value::EIGHT;
-        case '9':
-            return Value::NINE;
-        case '1':
-            { 
-                char secondChar = stream.consume();
-                if (secondChar == '0') {
-                    return Value::TEN;
-                }
-                else {
-                    throw ParseFailed(std::format("Invalid value: Expected a 0 after a 1", secondChar));
-                }
-            }
-        case 'J':
-            return Value::JACK;
-        case 'Q':
-            return Value::QUEEN;
-        case 'K':
-            return Value::KING;
-        case 'A':
-            return Value::ACE;
-        default:
-            throw ParseFailed(std::format("Invalid value: Got {}Expected 2-9, J, Q, K, A", firstChar));
+    case '2':
+        return Value::TWO;
+    case '3':
+        return Value::THREE;
+    case '4':
+        return Value::FOUR;
+    case '5':
+        return Value::FIVE;
+    case '6':
+        return Value::SIX;
+    case '7':
+        return Value::SEVEN;
+    case '8':
+        return Value::EIGHT;
+    case '9':
+        return Value::NINE;
+    case '1': {
+        // If we see a 1, it can only mean the value was intended to be 10 (the
+        // face cards are all represented by their letter)
+        char secondChar = stream.consume();
+        if (secondChar == '0') {
+            return Value::TEN;
+        } else {
+            throw ParseFailed(std::format(
+                "Invalid value: Expected a 0 after a 1", secondChar));
+        }
+    }
+    case 'J':
+        return Value::JACK;
+    case 'Q':
+        return Value::QUEEN;
+    case 'K':
+        return Value::KING;
+    case 'A':
+        return Value::ACE;
+    default:
+        throw ParseFailed(std::format(
+            "Invalid value: Got {}Expected 2-9, J, Q, K, A", firstChar));
     }
 }
 
-Card parseCard(TokenStream& stream) {
+Card parseCard(TokenStream &stream) {
     Value value = parseValue(stream);
     Suit suit = parseSuit(stream);
     return Card(value, suit);
 }
 
-
-Card parseCard(const std::string& input) {
+Card parseCard(const std::string &input) {
     TokenStream stream(input);
     return parseCard(stream);
 }
 
-std::vector<Card> parseCards(const std::string& input) {
+std::vector<Card> parseCards(const std::string &input) {
     TokenStream stream(input);
 
     std::vector<Card> cards;

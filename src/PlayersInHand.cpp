@@ -3,13 +3,20 @@
 
 PlayersInHand::PlayersInHand(std::vector<PlayerId> playerIds) {
     this->playersInHand = playerIds;
+
+    // Initially all players in the hand can bet
+    // Technically players without chips cannot bet, but we don't worry about
+    // that because they must eventually go "all in" or fold, and will thus be
+    // removed from the betting pool.
     for (PlayerId playerId : playerIds) {
         playersWhoCanBet.insert(playerId);
     }
 }
 
 void PlayersInHand::startNewBettingRound() {
+    // The last player to act is the last person in playersInHand.
     lastPlayer = playersInHand.size() - 1;
+    // The first player to act is the first person in playersInHand.
     currentPlayer = 0;
     m_isBettingOver = false;
 }
@@ -19,17 +26,28 @@ void PlayersInHand::removeCurrentPlayerFromBetting() {
 }
 
 void PlayersInHand::advanceCurrentPlayer() {
+    // We want to skip over players who cannot bet, hence the while() loop.
+    // The current player may have also gone all in, so they might not be able
+    // to bet either, so we need to advance the current player by one no matter
+    // what, hence the do-while.
     do {
+        // If the last player has acted, then betting is over.
         if (currentPlayer == lastPlayer) {
             m_isBettingOver = true;
             break;
         }
+        // If betting has not ended, advance the current player
         currentPlayer = (currentPlayer + 1) % playersInHand.size();
     } while (playersWhoCanBet.find(playersInHand[currentPlayer]) ==
              playersWhoCanBet.end());
 }
 
 void PlayersInHand::everyoneCanAct() {
+    // When everyone is allowed to act, the previous player is now the last one
+    // who can act.
+    // We dont need to worry about wether the previous player is allowed to bet,
+    // since the advanceCurrentPlayer method takes care of skipping over players
+    // who aren't allowed to bet.
     lastPlayer = currentPlayer - 1;
     if (lastPlayer < 0) {
         lastPlayer = playersInHand.size() - 1;

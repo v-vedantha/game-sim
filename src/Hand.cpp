@@ -106,6 +106,7 @@ HasFullHouse Hand::hasFullHouse() {
 
 HasThreeOfAKind Hand::hasThreeOfAKind() {
     HasThreeOfAKind result;
+    result.isThreeOfAKind = false;
 
     std::multiset<Value> values;
 
@@ -130,7 +131,7 @@ HasThreeOfAKind Hand::hasThreeOfAKind() {
         }
 
         std::sort(kickers.begin(), kickers.end(), std::greater<>());
-        for (int i = 0; i < result.kickers.size(); i++) {
+        for (int i = 0; i < kickers.size(); i++) {
             result.kickers[i] = kickers[i];
         }
     }

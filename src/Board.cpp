@@ -23,9 +23,17 @@ Street nextStreet(Street street) {
 Board::Board() {}
 Board::Board(std::vector<Card> cards) : cards(cards) {}
 
-void Board::addCard(Card card) { cards.push_back(card); }
+void Board::addCard(Card card) {
+    // We could check for repeated cards, but because this is only called in the
+    // context of tests or monte-carlo simulations (currently), we prefer to do
+    // the bare minimum here.
+    cards.push_back(card);
+}
 
 void Board::addCards(std::vector<Card> cards) {
+    // We could check for repeated cards, but because this is only called in the
+    // context of tests or monte-carlo simulations (currently), we prefer to do
+    // the bare minimum here.
     this->cards.insert(this->cards.end(), cards.begin(), cards.end());
 }
 
@@ -39,9 +47,12 @@ std::map<Street, int> totalCardsAtStreet = {
     {Street::RIVER, 5},
 };
 
-void Board::dealToStreet(Deck &deck, Street &street) {
+void Board::dealToStreet(Deck &deck, Street street) {
     while (cards.size() < totalCardsAtStreet[street]) {
-        addCard(deck.deal());
+        // We could check for repeated cards showing up in the board, but it is
+        // unnecessary since dealing cards from a deck removes the cards
+        // anyways.
+        cards.push_back(deck.deal());
     }
 }
 

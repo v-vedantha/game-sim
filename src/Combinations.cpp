@@ -5,7 +5,8 @@
 std::vector<std::vector<Card>>
 generateCombinations(const std::vector<Card> &cards, uint32_t numToChoose,
                      uint32_t startIdx) {
-    // If you want to choose zero cards, then there is only one combination.
+    // If you want to choose zero cards, then there is only one zero-element
+    // combination.
     if (numToChoose == 0) {
         return {};
     }
@@ -27,10 +28,11 @@ generateCombinations(const std::vector<Card> &cards, uint32_t numToChoose,
         it->push_back(cards[startIdx]);
     }
 
-    // Or you do not choose the first card.
+    // Or you exclude the first card.
     std::vector<std::vector<Card>> withoutFirstCard =
         generateCombinations(cards, numToChoose, startIdx + 1);
 
+    // Combine the two cases
     withFirstCard.insert(withFirstCard.end(), withoutFirstCard.begin(),
                          withoutFirstCard.end());
 
@@ -39,5 +41,6 @@ generateCombinations(const std::vector<Card> &cards, uint32_t numToChoose,
 
 std::vector<std::vector<Card>>
 generateCombinations(const std::vector<Card> &cards, uint32_t numToChoose) {
+    assert(cards.size() >= numToChoose);
     return generateCombinations(cards, numToChoose, 0);
 }
