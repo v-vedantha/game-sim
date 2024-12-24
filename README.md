@@ -11,7 +11,7 @@ This repository provides a simulator and hand evaluator for Texas Hold'em poker.
 - HoleCards: The two cards that each player has. Not visible to other players
 - Board: Up to 5 community cards everyone can see and use to construct a hand
 - Deck: The deck of cards
-- Runout: In the context of simulating a runout, this means simulating what would happen if some random cards were dealt.
+- Runout: The sequence of cards dealt after some point in the game. 
 - Pot: The money people have bet
 - Call, Fold, Raise, Check, All In: The usual poker actions
 - TableCards: The cards on the table (i.e. all the cards in a game)
