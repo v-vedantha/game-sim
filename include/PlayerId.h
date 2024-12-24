@@ -33,8 +33,12 @@ class PlayerId {
 };
 std::ostream &operator<<(std::ostream &os, const PlayerId &playerId);
 namespace std {
+/* Implement std::hash<PlayerId> so PlayerId can be used as a key in an
+ * unordered_map.
+ */
 template <> struct hash<PlayerId> {
     std::size_t operator()(const PlayerId &playerId) const {
+        // Just use the hash of the players name.
         return std::hash<std::string>{}(playerId.name);
     }
 };

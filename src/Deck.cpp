@@ -46,8 +46,8 @@ void Deck::removeCard(Card toRemove) {
 
 Card Deck::deal() {
     // Cannot deal from an empty deck!
-    // Not expected to be an issue in practice. Even with 10 players in holdem
-    // poker, you only deal ~25 cards.
+    // Not expected in practice. Even with 10 players in holdem poker, you only
+    // deal ~25 cards.
     if (cards.empty()) {
         throw std::runtime_error("Deck is empty.");
     }

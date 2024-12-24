@@ -15,6 +15,8 @@ class TokenStream {
   public:
     TokenStream(std::string input) {
         this->input = input;
+
+        // Start at position 0
         this->currentTokenIdx = 0;
     }
 
@@ -66,6 +68,12 @@ class TokenStream {
 };
 
 Suit parseSuit(TokenStream &stream) {
+    // The tokens corresponding to each suit are shown below
+    // Spades = S or s
+    // Clubs = C or c
+    // Diamonds = D or d
+    // Hearts = H or h
+    // (in general it is the first letter in the suit)
     char suit = stream.consume();
     switch (suit) {
     case 'H':
@@ -91,6 +99,8 @@ Suit parseSuit(TokenStream &stream) {
 }
 
 Value parseValue(TokenStream &stream) {
+    // For the numeric cards, we can only parse their numeric values (i.e. 2-10)
+    // For face cards, we only parse the first letter capitalized (J, Q, K, A)
     char firstChar = stream.consume();
     switch (firstChar) {
     case '2':
@@ -110,8 +120,7 @@ Value parseValue(TokenStream &stream) {
     case '9':
         return Value::NINE;
     case '1': {
-        // If we see a 1, it can only mean the value was intended to be 10 (the
-        // face cards are all represented by their letter)
+        // If we see a 1, it can only mean the value was intended to be 10
         char secondChar = stream.consume();
         if (secondChar == '0') {
             return Value::TEN;
@@ -135,7 +144,14 @@ Value parseValue(TokenStream &stream) {
 }
 
 Card parseCard(TokenStream &stream) {
+    // Cards are meant to be formatter as ValueSuit
+
+    // First parse the value. Note that this will throw an exception if the
+    // value cannot be parsed.
     Value value = parseValue(stream);
+
+    // Then parse the suit. Similarly will throw an exception if suit cannot be
+    // parsed.
     Suit suit = parseSuit(stream);
     return Card(value, suit);
 }
@@ -150,6 +166,10 @@ std::vector<Card> parseCards(const std::string &input) {
 
     std::vector<Card> cards;
     while (stream.hasNext()) {
+        // Any of these operations can throw, and since we dont catch it the
+        // caller of parseCards must deal with it.
+        // One improvement would be to return the cards we were able to parse in
+        // case we get an error.
         cards.push_back(parseCard(stream));
     }
     return cards;

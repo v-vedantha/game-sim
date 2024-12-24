@@ -11,6 +11,7 @@
  * - `CLUBS`: The clubs suit.
  * - `SPADES`: The spades suit.
  * - `SUIT_UNSPECIFIED`: A placeholder for an unspecified suit.
+ * When adding a new suit remember to update allSuits.
  */
 enum class Suit { SUIT_UNSPECIFIED, HEARTS, DIAMONDS, CLUBS, SPADES };
 
@@ -22,6 +23,7 @@ enum class Suit { SUIT_UNSPECIFIED, HEARTS, DIAMONDS, CLUBS, SPADES };
  * - Face cards: JACK, QUEEN, KING.
  * - ACE: The highest or lowest card in some games.
  * - `VALUE_UNSPECIFIED`: A placeholder for an unspecified value.
+ * When adding a new value remember to update allValues.
  */
 enum class Value {
     VALUE_UNSPECIFIED,
@@ -42,11 +44,13 @@ enum class Value {
 
 /**
  * @brief A collection of all possible suits for a standard deck of cards.
+ * Useful to iterate over all suits.
  */
 extern const std::vector<Suit> allSuits;
 
 /**
  * @brief A collection of all possible values for a standard deck of cards.
+ * Useful to iterate over all values.
  */
 extern const std::vector<Value> allValues;
 
@@ -75,7 +79,7 @@ class Card {
     Card(Value value, Suit suit);
 
     /**
-     * @brief Constructs an unspecified card.
+     * @brief Constructs a card with unspecified suit/value
      */
     Card();
 
@@ -102,19 +106,23 @@ std::ostream &operator<<(std::ostream &os, const Suit &suit);
 
 /**
  * @struct CardComparator
- * @brief A comparator for sorting cards in ascending order based on their
- * value.
+ * @brief Returns true if lhs < rhs (useful for sorting in ascending order)
  */
 struct CardComparator {
-    bool operator()(const Card &c1, const Card &c2) const;
+    /**
+     * @brief Returns true if lhs < rhs
+     */
+    bool operator()(const Card &lhs, const Card &rhs) const;
 };
 
 /**
  * @struct CardReverseComparator
- * @brief A comparator for sorting cards in descending order based on their
- * value.
+ * @brief Returns true if lhs > rhs (useful for sorting in descending order)
  */
 struct CardReverseComparator {
+    /**
+     * @brief Returns true if lhs > rhs
+     */
     bool operator()(const Card &c1, const Card &c2) const;
 };
 

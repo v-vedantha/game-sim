@@ -5,14 +5,16 @@
 std::vector<std::vector<Card>>
 generateCombinations(const std::vector<Card> &cards, uint32_t numToChoose,
                      uint32_t startIdx) {
+    // If we've past the end of cards, something went wrong
+    assert(startIdx < cards.size());
     // If you want to choose zero cards, then there is only one zero-element
     // combination.
     if (numToChoose == 0) {
         return {};
     }
 
-    // If you want to select as many cards as are available, then there is only
-    // one combination (all the remaining cards).
+    // If you want to select as many cards as are available to choose from, then
+    // there is only one combination (all the remaining cards).
     if (cards.size() - startIdx == numToChoose) {
         std::vector<Card> remainingCards;
         for (int i = startIdx; i < cards.size(); ++i) {

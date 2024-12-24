@@ -41,7 +41,7 @@ HasStraight Hand::hasStraight() {
     HasStraight result;
     result.isStraight = true;
     // Check for a 5-high straight separately since an Ace is counted as low in
-    // only this case
+    // this case
     if (cards[0].value == Value::ACE && cards[4].value == Value::TWO &&
         cards[3].value == Value::THREE && cards[2].value == Value::FOUR &&
         cards[1].value == Value::FIVE) {

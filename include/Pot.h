@@ -81,8 +81,6 @@ class Pot {
      * @brief Tracks the contributions of each player to the pot for every
      * street.
      *
-     * This is a map where each street maps to another map of player IDs to
-     * their contributions.
      */
     std::unordered_map<Street, std::unordered_map<PlayerId, int>> amountsPutIn;
 };

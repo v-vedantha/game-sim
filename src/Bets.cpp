@@ -20,9 +20,15 @@ Bets::Bets(std::vector<PlayerId> playerIds,
 }
 
 void Bets::startRound(Street street) {
+    // Create the new betting round
     currentStreet = street;
     bettingRounds[street] = std::make_unique<BettingRound>();
+
+    // Set up the pot
     pot.startRound(street);
+
+    // And the playersInHand object which tracks whose turn it is should also be
+    // notified.
     playersInHand->startNewBettingRound();
 }
 
@@ -93,7 +99,8 @@ void Bets::allIn(PlayerId playerId) {
     int allInTotalChips =
         pot.amountBet(currentStreet, playerId) + remainingChips;
 
-    // If going all in also happens to be a raise, then action reopens.
+    // If going all in also happens to be a raise action is reopened for
+    // everyone (except the player who went all in).
     if (allInTotalChips > bettingRounds[currentStreet]->currentBet()) {
         playersInHand->everyoneCanAct();
     }
@@ -107,6 +114,8 @@ void Bets::allIn(PlayerId playerId) {
     // since they have no more chips remaining. They are still in the hand
     // though and can win money at showdown.
     playersInHand->removeCurrentPlayerFromBetting();
+
+    // Next player's turn to act.
     playersInHand->advanceCurrentPlayer();
 }
 

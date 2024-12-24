@@ -31,8 +31,10 @@ void HoleCards::dealCards(Deck &deck) {
 
 Strength HoleCards::evaluate(Board &board) {
 
-    // To evaluate the best 5 card hand constructed with the hole cards and the
-    // board, we first generate all possible 5 card hands from these two.
+    // Step 1: To evaluate the best 5 card hand constructed with the hole cards
+    // and the board, we first generate all possible 5 card hands from these
+    // two.
+
     // Combine all the cards together into one vector.
     std::vector<Card> allCards;
     for (const Card &card : this->cards) {
@@ -48,8 +50,8 @@ Strength HoleCards::evaluate(Board &board) {
     // Ensure there is atleast one-combination of 5 card hands.
     assert(combinations.size() > 0);
 
-    // Evaluate the strength of each 5 card hand and return the strongest
-    // one.
+    // Step 2: Evaluate the strength of each 5 card hand and return the
+    // strongest one.
     bool isFirst = true;
     Strength strongest;
     for (const std::vector<Card> &combination : combinations) {

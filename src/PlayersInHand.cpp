@@ -14,9 +14,10 @@ PlayersInHand::PlayersInHand(std::vector<PlayerId> playerIds) {
 }
 
 void PlayersInHand::startNewBettingRound() {
-    // The last player to act is the last person in playersInHand.
+    // Eventually action will start on the dealer/blinds depending on which
+    // street it is, but for now action starts on the first player in
+    // playersInHand, and ends on the last player
     lastPlayer = playersInHand.size() - 1;
-    // The first player to act is the first person in playersInHand.
     currentPlayer = 0;
     m_isBettingOver = false;
 }

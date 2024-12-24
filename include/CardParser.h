@@ -32,13 +32,16 @@ class ParseFailed : public std::exception {
 };
 
 /**
- * @brief Parses a single card from a string input.
+ * @brief Parses a single card from a string input. Cards are meant to be
+ * formatted as ValueSuit The value is 2-10 or J, Q, K, A for their respective
+ * cards. The suit is the first letter of the common name, so Spades -> S or s
+ * and so on.
  *
  * Example inputs: "10s", "AH".
  *
  * @param input A string representing a single card.
  * @return A `Card` object representing the parsed card.
- * @throws ParseFailed if the input is invalid or cannot be parsed.
+ * @throws ParseFailed if the input cannot be parsed.
  */
 Card parseCard(const std::string &input);
 

@@ -11,7 +11,7 @@ void BettingRound::raiseTo(int amount) {
 
 void BettingRound::allInTo(int amount) {
     // If the allIn exceeds the current bet, then players must match the all in
-    // to stay in the hand.
+    // to stay in the hand, making this the new current bet.
     if (amount > m_currentBet) {
         m_currentBet = amount;
     }

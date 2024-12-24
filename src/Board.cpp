@@ -49,9 +49,8 @@ std::map<Street, int> totalCardsAtStreet = {
 
 void Board::dealToStreet(Deck &deck, Street street) {
     while (cards.size() < totalCardsAtStreet[street]) {
-        // We could check for repeated cards showing up in the board, but it is
-        // unnecessary since dealing cards from a deck removes the cards
-        // anyways.
+        // Deck.deal removes the card from the deck, so no need to worry about
+        // potential repeated cards.
         cards.push_back(deck.deal());
     }
 }

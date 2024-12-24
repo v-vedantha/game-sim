@@ -28,8 +28,10 @@ void Game::dealToNextStreet() {
     assert(bets.bettingRoundComplete());
 
     street = nextStreet(street);
-    bets.startRound(street);
     tableCards.dealToStreet(street);
+
+    // When dealing to the next street start betting for that street too.
+    bets.startRound(street);
 }
 
 PlayerId Game::nextIdToAct() { return bets.nextIdToAct(); }
@@ -38,9 +40,8 @@ void Game::finish() {
     // Make sure betting is finished up
     assert(bets.bettingRoundComplete());
 
-    // Also the game can only finish on the river. Even if all players go all-in
-    // preflop (in which case there would just be no action on the other
-    // streets).
+    // The game can only finish on the river. Even if all players go all-in
+    // preflop, the remaining cards must still be dealt out before showdown.
     assert(street == Street::RIVER);
     bets.distributeWinnings(tableCards);
 }
