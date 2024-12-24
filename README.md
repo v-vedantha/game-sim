@@ -31,6 +31,7 @@ This repository provides a simulator and hand evaluator for Texas Hold'em poker.
 - **`src/`**: Source files implementing simulation and evaluation logic.
 - **`test/`**: Examples and unit tests to demonstrate functionality.
   - `FullGameTest.cpp`: Full simulation of a poker game.
+  - `HandPotentialTest.cpp`: Example usage of `HoleCards::evaluatePotential`
 
 
 ##  Usage
