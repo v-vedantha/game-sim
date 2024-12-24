@@ -84,10 +84,8 @@ Potential HoleCards::evaluatePotential(Board &board, Street street,
 
     PotentialBuilder potentialBuilder;
 
-    // Then we simulate several runouts, adding the results to the
-    // potentialBuilder
+    // Then we simulate several runouts
     for (int i = 0; i < 10000; i++) {
-        // Copy the deck and the board.
         Deck deckCopy = deck;
         Board boardCopy = board;
 
@@ -97,7 +95,7 @@ Potential HoleCards::evaluatePotential(Board &board, Street street,
         // Deal the board out to the given street
         boardCopy.dealToStreet(deckCopy, street);
 
-        // Update the potentialBuilder with the strength of the resulting hand.
+        // And log the strength of the hand this runout gave us.
         Strength strengthOfRunout = evaluate(boardCopy);
         potentialBuilder.addRunout(strengthOfRunout.rank);
     }
