@@ -58,7 +58,7 @@ TableCards::getWinners(const std::vector<PlayerId> &eligiblePlayers) {
         strengths[player] = holeCards[player].evaluate(board);
     }
 
-    // and then just return the players who were the strongest, which is what
+    // ...and then just return the players who were the strongest, which is what
     // this mildly intricate loop does.
     // Note that all winners must be equally strong since if there are multiple
     // winners, they must have tied hand strenghts.
@@ -107,7 +107,7 @@ WinningProbabilities TableCards::winningProbabilities(std::mt19937 &rng) {
         // Simulate the game to completion
         simulatedTableCards.dealToStreet(Street::RIVER);
 
-        // And log the winners for this runout.
+        // Update the winners for this runout.
         std::vector<PlayerId> winners = simulatedTableCards.getWinners();
         winningProbabilitiesBuilder.addRunoutResult(winners);
     }

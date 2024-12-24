@@ -42,8 +42,8 @@ WinningProbabilities WinningProbabilitiesBuilder::winningProbabilities() {
         totalRunouts += it->second;
     }
 
-    // Just to sanity check that some runouts were added and avoid
-    // division-by-zero errors.
+    // Just to sanity check that users remembered to add runouts and avoids
+    // division by zero errors.
     assert(totalRunouts > 0.01);
 
     // The chance each player has of winning is the # of runouts they win / the

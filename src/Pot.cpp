@@ -45,7 +45,7 @@ Pot::getWinnings(TableCards &tableCards, PlayersInHand &playersInHand) {
     // sub-pot becomes the 80 chips from the first player, and the only one
     // playing for this sub pot is the original player.
 
-    // Step 1: Combine the pots from each street to make it easier to work with.
+    // Combine the pots from each street to make it easier to work with.
     std::unordered_map<PlayerId, int> combinedPot;
     for (auto it = amountsPutIn.begin(); it != amountsPutIn.end(); it++) {
         for (auto it2 = it->second.begin(); it2 != it->second.end(); it2++) {
@@ -73,7 +73,7 @@ Pot::getWinnings(TableCards &tableCards, PlayersInHand &playersInHand) {
     };
 
     while (!isEmpty()) {
-        // Step 1: Find the smallest contribution to the pot. This tells us the
+        // Find the smallest contribution to the pot. This tells us the
         // smallest sub-pot to play for.
         int smallestContribution = std::numeric_limits<int>::max();
         for (PlayerId playerId : playerIdsInHand) {
@@ -87,8 +87,8 @@ Pot::getWinnings(TableCards &tableCards, PlayersInHand &playersInHand) {
         // the hand who has contributed to this pot
         std::vector<PlayerId> playersInPot;
         for (PlayerId playerId : playerIdsInHand) {
-            // Technically we can check combinedPot[playerId] >= 0, and they
-            // would be equivalent, but this extra stringent helps catch
+            // Technically we can check combinedPot[playerId] > 0, and they
+            // would be equivalent, but this extra stringent check helps catch
             // potential implementation bugs.
             if (combinedPot[playerId] >= smallestContribution) {
                 playersInPot.push_back(playerId);
@@ -97,7 +97,6 @@ Pot::getWinnings(TableCards &tableCards, PlayersInHand &playersInHand) {
 
         // Remove the sub-pot from future consideration. In the process we want
         // to figure out how much this pot is worth.
-
         // This pot is not just worth smallestContribution * number of players
         // in pot because it can also include contributions from players who
         // have folded out of the hand.
