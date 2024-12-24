@@ -23,14 +23,14 @@ generateCombinations(const std::vector<Card> &cards, uint32_t numToChoose,
         return {remainingCards};
     }
 
-    // In the general case, you either choose the first card.
+    // In the general case, you either choose the first card...
     std::vector<std::vector<Card>> withFirstCard =
         generateCombinations(cards, numToChoose - 1, startIdx + 1);
     for (auto it = withFirstCard.begin(); it != withFirstCard.end(); it++) {
         it->push_back(cards[startIdx]);
     }
 
-    // Or you exclude the first card.
+    // ...or you exclude the first card.
     std::vector<std::vector<Card>> withoutFirstCard =
         generateCombinations(cards, numToChoose, startIdx + 1);
 
