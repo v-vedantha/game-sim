@@ -90,7 +90,7 @@ void TableCards::shuffleDeck(std::mt19937 &rng) { deck.shuffle(rng); }
 
 WinningProbabilities TableCards::winningProbabilities(std::mt19937 &rng) {
     // Our strategy for figuring out the odds of each player winning the hand is
-    // to just run the board out to completion several times, and figure out how
+    // to run the board out to completion several times, and figure out how
     // often each player wins.
     WinningProbabilitiesBuilder winningProbabilitiesBuilder =
         WinningProbabilitiesBuilder(players);
