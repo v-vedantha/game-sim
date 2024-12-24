@@ -22,7 +22,7 @@ This repository provides a simulator and hand evaluator for Texas Hold'em poker.
 - Street: Preflop, Flop, Turn, River. Streets tell you how many cards are dealt to the board. On the flop there are 3, turn has 4, and river has 5. 
 - Round: Somewhat similar to street. Used mostly interchangably.
 - Betting round: Each street opens up a new round of betting.
-- Potential: The potential of a hand is the hands you might make if the correct cards are dealt to the board. Only makes sense if the board still has more cards to be dealt. 
+- Potential: The potential of a hand is the hands you might make if the correct cards are dealt to the board. 
 ---
 
 ## Features
