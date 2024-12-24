@@ -13,7 +13,7 @@ This repository provides a simulator and hand evaluator for Texas Hold'em poker.
 - Deck: The deck of cards
 - Runout: In the context of simulating a runout, this means simulating what would happen if some random cards were dealt.
 - Pot: The money people have bet
-- Call,Fold,Raise,Check: The usual poker actions
+- Call, Fold, Raise, Check, All In: The usual poker actions
 - TableCards: The cards on the table (i.e. all the cards in a game)
 - Hand: 5 cards you can construct using your two hole cards and the board.
 - Rank of a hand/Primary hand: Royal flush, Pair, Quads etc.
