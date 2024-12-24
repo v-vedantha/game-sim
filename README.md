@@ -6,23 +6,23 @@ This repository provides a simulator and hand evaluator for Texas Hold'em poker.
 
 ---
 ## Terminology
-- Suit: Spades, Clubs, Hearts, Diamons
-- Value: The value of a card. 2-10, J-A
-- HoleCards: The two cards that each player has. Not visible to other players
-- Board: Up to 5 community cards everyone can see and use to construct a hand
-- Deck: The deck of cards
-- Runout: The sequence of cards dealt after some point in the game. 
-- Pot: The money people have bet
-- Call, Fold, Raise, Check, All In: The usual poker actions
-- TableCards: The cards on the table (i.e. all the cards in a game)
-- Hand: 5 cards you can construct using your two hole cards and the board.
-- Rank of a hand/Primary hand: Royal flush, Pair, Quads etc.
-- Strength: How strong a hand is. Strengths can be compared. Rank + kickers. 
-- Kickers: When two hands with the same rank are compared, they could still differ in kickers. For example, an Ace high flush beats a king high flush becase the Ace kicker beats the King. This is slightly different from the usual definition because kickers includes the cards that make up the primary hand
-- Street: Preflop, Flop, Turn, River. Streets tell you how many cards are dealt to the board. On the flop there are 3, turn has 4, and river has 5. 
-- Round: Somewhat similar to street. Used mostly interchangably.
-- Betting round: Each street opens up a new round of betting.
-- Potential: The potential of a hand is the hands you might make if the correct cards are dealt to the board. 
+- **Suit**: Spades, Clubs, Hearts, Diamons
+- **Value**: The value of a card. 2-10, J-A
+- **HoleCards**: The two cards that each player has. Not visible to other players
+- **Board**: Up to 5 community cards everyone can see and use to construct a hand
+- **Deck**: The deck of cards
+- **Runout**: The sequence of cards dealt after some point in the game. 
+- **Pot**: The money people have bet
+- **Call, Fold, Raise, Check, All In**: The usual poker actions
+- **TableCards**: The cards on the table (i.e. all the cards in a game)
+- **Hand**: 5 cards you can construct using your two hole cards and the board.
+- **Rank of a hand/Primary hand**: Royal flush, Pair, Quads etc.
+- **Strength**: How strong a hand is. Strengths can be compared. Rank + kickers. 
+- **Kickers**: When two hands with the same rank are compared, they could still differ in kickers. For example, an Ace high flush beats a king high flush becase the Ace kicker beats the King. This is slightly different from the usual definition because kickers includes the cards that make up the primary hand
+- **Street**: Preflop, Flop, Turn, River. Streets tell you how many cards are dealt to the board. On the flop there are 3, turn has 4, and river has 5. 
+- **Round**: Somewhat similar to street. Used mostly interchangably.
+- **Betting round**: Each street opens up a new round of betting.
+- **Potential**: The potential of a hand is the hands you might make if the correct cards are dealt to the board. 
 ---
 
 ## Features
