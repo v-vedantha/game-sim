@@ -1,6 +1,7 @@
 #pragma once
 #include "PlayerId.h"
 #include <map>
+#include <memory>
 #include <vector>
 
 /**
@@ -19,8 +20,8 @@ class WinningProbabilities {
      * @param winningProbabilities The chance each players has of winning the
      * game.
      */
-    WinningProbabilities(
-        std::unordered_map<PlayerId, double> winningProbabilities);
+    WinningProbabilities(std::unique_ptr<std::unordered_map<PlayerId, double>>
+                             winningProbabilities);
 
     /**
      * @brief Gets the probability of the specifid player winning. If the player
@@ -37,7 +38,7 @@ class WinningProbabilities {
      * @brief The chance of each player winning.
      *
      */
-    std::unordered_map<PlayerId, double> winningProbabilities;
+    std::unique_ptr<std::unordered_map<PlayerId, double>> winningProbabilities;
 };
 
 /**

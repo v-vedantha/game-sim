@@ -99,9 +99,10 @@ class Game {
 
     TableCards tableCards;
 
-    // Game owns playersInHand. Bets stores an additional reference
+    // Game owns playersInHand. Chips stores an additional reference
     std::shared_ptr<PlayersInHand> playersInHand;
 
+    // Also stores the chipstacks of each player.
     Bets bets;
 
     Street street;

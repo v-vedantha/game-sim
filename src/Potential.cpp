@@ -1,9 +1,11 @@
 #include "Potential.h"
 #include "Strength.h"
+#include <cassert>
 #include <iostream>
 #include <map>
 
 PotentialBuilder::PotentialBuilder() {
+    // Initially none of the ranks can ever be constructed.
     for (Rank rank : allRanks) {
         numRunoutsWithRank[rank] = 0;
     }
@@ -18,18 +20,26 @@ Potential PotentialBuilder::buildPotential() {
         numRunouts += it->second;
     }
 
-    std::map<Rank, double> oddsOfHitting;
+    // Avoid division by zero errors if someone forgot to add any runouts.
+    assert(numRunouts > 0.1);
 
+    std::unique_ptr<std::map<Rank, double>> oddsOfHitting =
+        std::make_unique<std::map<Rank, double>>();
+
+    // The odds of hitting a particular rank is the number of runouts which you
+    // hit that rank / the number of runouts simulated
     for (auto it = numRunoutsWithRank.begin(); it != numRunoutsWithRank.end();
          it++) {
-        oddsOfHitting[it->first] = (1.0 * it->second) / numRunouts;
+        oddsOfHitting->insert({it->first, 1.0 * it->second / numRunouts});
     }
 
-    return Potential(oddsOfHitting);
+    return Potential(std::move(oddsOfHitting));
 }
 
-Potential::Potential(std::map<Rank, double> oddsOfHitting) {
-    m_oddsOfHitting = oddsOfHitting;
+Potential::Potential(std::unique_ptr<std::map<Rank, double>> oddsOfHitting) {
+    // We should probably validate the the odds of hittin each rank are in the
+    // range 0-1 and sum to 1.0.
+    this->m_oddsOfHitting = std::move(oddsOfHitting);
 }
 
-double Potential::oddsOfHitting(Rank rank) { return m_oddsOfHitting[rank]; }
+double Potential::oddsOfHitting(Rank rank) { return m_oddsOfHitting->at(rank); }

@@ -66,7 +66,8 @@ void Bets::check(PlayerId playerId) {
 }
 
 void Bets::fold(PlayerId playerId) {
-    // Folded players are no longer in the hand.
+    // Folded players are no longer in the hand and cannot win any money from
+    // it.
     playersInHand->removeCurrentPlayerFromHand();
 }
 

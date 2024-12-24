@@ -39,16 +39,16 @@ class IllegalAction : public std::exception {
 
 /**
  * @class Bets
- * @brief Manages betting actions, betting rounds, and pots in the game.
+ * @brief Manages all the chips in the game. It's primary duties involves
+ * keeping track of betting. However, since betting is so closely tied with
+ * chipstacks, we manage the chipstacks in this class as well.
  *
- * This class handles player bets, updates the pot, validates actions, and
- * provides information about the betting state for game management.
  */
 class Bets {
 
   public:
     /**
-     * @brief Constructs a new Bets object.
+     * @brief Constructs a new Chips object.
      *
      * @param playerIds A list of all players in the game.
      * @param playersInHand A shared pointer to a PlayersInHand object to track

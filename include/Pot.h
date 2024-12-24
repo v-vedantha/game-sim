@@ -78,6 +78,12 @@ class Pot {
     Street street;
 
     /**
+     * @brief All the players in the hand
+     *
+     */
+    std::vector<PlayerId> playerIds;
+
+    /**
      * @brief Tracks the contributions of each player to the pot for every
      * street.
      *

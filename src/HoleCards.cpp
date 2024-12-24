@@ -13,7 +13,7 @@ HoleCards::HoleCards(std::vector<Card> cards) { this->cards = cards; }
 
 void HoleCards::addCards(std::vector<Card> cards) {
     for (const Card &card : cards) {
-        // Optionally could check for repeated cards here.
+        // Could check for repeated cards here if wanted.
         this->cards.push_back(card);
     }
 }
@@ -79,13 +79,13 @@ Potential HoleCards::evaluatePotential(Board &board, Street street,
     // the cards in other players hands), so we can build a deck containing all
     // the cards we can expect to show up.
     Deck deck;
-    // The deck does not contain our cards
     deck.removeCards(cards);
-    // or the cards on the board
     deck.removeCards(board.getCards());
 
     PotentialBuilder potentialBuilder;
 
+    // Then we simulate several runouts, adding the results to the
+    // potentialBuilder
     for (int i = 0; i < 10000; i++) {
         // Copy the deck and the board.
         Deck deckCopy = deck;

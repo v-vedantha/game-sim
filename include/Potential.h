@@ -1,6 +1,7 @@
 #include "Card.h"
 #include "Strength.h"
 #include <map>
+#include <memory>
 
 /**
  * @brief Describes the hands that are possible from a position. For example, if
@@ -24,10 +25,10 @@ class Potential {
      * @param oddsOfHitting A map from rank to the odds of hitting that. Each
      * odds must be [0.0-1.0] and the odds should ideally sum to 1.0
      */
-    Potential(std::map<Rank, double> oddsOfHitting);
+    Potential(std::unique_ptr<std::map<Rank, double>> oddsOfHitting);
 
   private:
-    std::map<Rank, double> m_oddsOfHitting;
+    std::unique_ptr<std::map<Rank, double>> m_oddsOfHitting;
 };
 
 /**

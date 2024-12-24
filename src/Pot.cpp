@@ -1,15 +1,16 @@
 #include "Pot.h"
 #include <iostream>
 
-Pot::Pot(std::vector<PlayerId> playerIds) {
-    for (PlayerId playerId : playerIds) {
-        amountsPutIn[street][playerId] = 0;
-    }
-}
+Pot::Pot(std::vector<PlayerId> playerIds) { this->playerIds = playerIds; }
 
 void Pot::startRound(Street street) {
     this->street = street;
     amountsPutIn[street] = std::unordered_map<PlayerId, int>();
+
+    // At the start of every round, every player has put in no chips
+    for (PlayerId playerId : playerIds) {
+        amountsPutIn[street][playerId] = 0;
+    }
 }
 
 void Pot::add(PlayerId playerId, int amount) {
