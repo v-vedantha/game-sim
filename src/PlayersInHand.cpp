@@ -1,7 +1,7 @@
-#include "playersInGame.h"
+#include "PlayersInHand.h"
 #include <iostream>
 
-playersInGame::playersInGame(std::vector<PlayerId> playerIds) {
+PlayersInHand::PlayersInHand(std::vector<PlayerId> playerIds) {
     this->playersInGame = playerIds;
 
     // Initially all players in the hand can bet
@@ -13,7 +13,7 @@ playersInGame::playersInGame(std::vector<PlayerId> playerIds) {
     }
 }
 
-void playersInGame::startNewBettingRound() {
+void PlayersInHand::startNewBettingRound() {
     // Eventually action will start on the dealer/blinds depending on which
     // street it is, but for now action starts on the first player in
     // playersInGame, and ends on the last player
@@ -22,11 +22,11 @@ void playersInGame::startNewBettingRound() {
     m_isBettingOver = false;
 }
 
-void playersInGame::removeCurrentPlayerFromBetting() {
+void PlayersInHand::removeCurrentPlayerFromBetting() {
     playersWhoCanBet.erase(playersInGame[currentPlayer]);
 }
 
-void playersInGame::advanceCurrentPlayer() {
+void PlayersInHand::advanceCurrentPlayer() {
     // We want to skip over players who cannot bet, hence the while() loop.
     // The current player may have also gone all in, so they might not be able
     // to bet either, so we need to advance the current player by one no matter
@@ -46,7 +46,7 @@ void playersInGame::advanceCurrentPlayer() {
                                           // and players who have folded
 }
 
-void playersInGame::everyoneCanAct() {
+void PlayersInHand::everyoneCanAct() {
     // When everyone is allowed to act, the previous player is now the last one
     // who can act.
     // We dont need to worry about wether the previous player is allowed to bet,
@@ -58,20 +58,22 @@ void playersInGame::everyoneCanAct() {
     }
 }
 
-PlayerId playersInGame::nextIdToAct() { return playersInGame[currentPlayer]; }
+PlayerId PlayersInHand::nextIdToAct() { return playersInGame[currentPlayer]; }
 
-void playersInGame::removeCurrentPlayerFromHand() {
+void PlayersInHand::removeCurrentPlayerFromHand() {
     playersWhoFolded.insert(playersInGame[currentPlayer]);
 }
 
-std::vector<PlayerId> playersInGame::getPlayersStillInHand() {
+std::vector<PlayerId> PlayersInHand::getPlayersStillInHand() {
+    // The players still in the hand is everyone in the game who has not folded
+    // yet.
     std::vector<PlayerId> playersStillInHand;
     for (PlayerId player : playersInGame) {
         if (playersWhoFolded.find(player) == playersWhoFolded.end()) {
-            playersSillInHand.push_back(player);
+            playersStillInHand.push_back(player);
         }
     }
     return playersStillInHand;
 }
 
-bool playersInGame::isBettingOver() { return m_isBettingOver; }
+bool PlayersInHand::isBettingOver() { return m_isBettingOver; }
