@@ -14,7 +14,6 @@ Deck::Deck() {
 
 void Deck::shuffle(std::mt19937 &rng) {
     // Shuffle the deck using the given rng seed.
-
     // std::shuffle accepts vector/array style containers, not lists, so we need
     // to copy the cards into a vector.
     std::vector<Card> cardsVec =

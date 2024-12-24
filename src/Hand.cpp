@@ -7,8 +7,10 @@ void Hand::setCards(std::array<Card, 5> cards) {
     this->cards = cards;
     std::sort(this->cards.begin(), this->cards.end(), CardReverseComparator());
 
-    // this->values is used to count the number of each card, which is used to
-    // check for full houses for example
+    // values is used to count how many times each value appears in the hand,
+    // which is used to check for full houses or other paired hands.
+    // For example: If your hand is AAAA2 -> values[A] = 4 and values[2] = 1,
+    // which makes it easy to tell that this is a four of a kind.
     this->values.clear();
     for (const Card &card : this->cards) {
         this->values.insert(card.value);
@@ -29,7 +31,7 @@ HasFlush Hand::hasFlush() {
     HasFlush result;
     result.isFlush = true;
 
-    // A flush is defined by all cards being the same suit
+    // A flush is means all cards are of the same suit
     for (int i = 1; i < 5; i++) {
         if (cards[i].suit != cards[0].suit) {
             result.isFlush = false;
@@ -199,6 +201,8 @@ HasTwoPair Hand::hasTwoPair() {
     if (foundFirstPair && foundSecondPair) {
         result.isTwoPair = true;
 
+        // Sort result.pairs since HasTwoPairs promises that the pairs are
+        // sorted.
         result.pairs[0] =
             firstPairValue > secondPairValue ? firstPairValue : secondPairValue;
         result.pairs[1] =
@@ -259,7 +263,10 @@ Strength Hand::evaluate() {
     // hands.
     HasFlush flushResult = hasFlush();
     HasStraight straightResult = hasStraight();
+    // Straight flush is the best hand.
     if (flushResult.isFlush && straightResult.isStraight) {
+        // The strength of the straight flush is only dependent on the highest
+        // card.
         return Strength(Rank::STRAIGHT_FLUSH, {straightResult.highCard});
     }
 
@@ -267,8 +274,8 @@ Strength Hand::evaluate() {
     if (quadsResult.isQuads) {
         return Strength(Rank::FOUR_OF_A_KIND,
                         // The first point of comparison between two quads hands
-                        // is the man quads card, followed by the kicker, so the
-                        // kickers are arranged accordingly.
+                        // is the main quads card, followed by the kicker, so
+                        // the kickers are arranged accordingly.
                         {quadsResult.quadsCard, quadsResult.kicker});
     }
 
@@ -297,7 +304,7 @@ Strength Hand::evaluate() {
 
     HasThreeOfAKind threeOfAKindResult = hasThreeOfAKind();
     if (threeOfAKindResult.isThreeOfAKind) {
-        // Three of a kinds are compared by the kind that is tripled up,
+        // Three of a kinds are compared by the value that occurs thrice,
         // followed by the two other cards.
         return Strength(Rank::THREE_OF_A_KIND, {threeOfAKindResult.threeOfAKind,
                                                 threeOfAKindResult.kickers[0],
@@ -328,6 +335,6 @@ Strength Hand::evaluate() {
         kickers.push_back(card.value);
     }
 
-    // Cards are already sorted, so no need to sort the kickers again.
+    // cards is already sorted, so no need to sort the kickers again.
     return Strength(Rank::HIGH_CARD, kickers);
 }

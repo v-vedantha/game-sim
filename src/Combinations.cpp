@@ -2,11 +2,22 @@
 #include <cassert>
 #include <iostream>
 
+/**
+ * @brief Generate combinations of numToChoose cards from cards, using only
+ * cards at or after the startIdx.
+ *
+ * @param cards
+ * @param numToChoose
+ * @param startIdx Inclusive
+ * @return std::vector<std::vector<Card>>
+ */
 std::vector<std::vector<Card>>
 generateCombinations(const std::vector<Card> &cards, uint32_t numToChoose,
                      uint32_t startIdx) {
+
     // If we've passed the end of cards, something went wrong
     assert(startIdx < cards.size());
+
     // If you want to choose zero cards, then there is only one zero-element
     // combination.
     if (numToChoose == 0) {
@@ -23,7 +34,7 @@ generateCombinations(const std::vector<Card> &cards, uint32_t numToChoose,
         return {remainingCards};
     }
 
-    // In the general case, you either choose the first card...
+    // In the general case, you either include the first card...
     std::vector<std::vector<Card>> withFirstCard =
         generateCombinations(cards, numToChoose - 1, startIdx + 1);
     for (auto it = withFirstCard.begin(); it != withFirstCard.end(); it++) {

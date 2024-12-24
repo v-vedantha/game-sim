@@ -78,11 +78,9 @@ class PlayersInHand {
 
   private:
     /**
-     * @brief The players who were still in the hand (everyone who has not
-     * folded)
-     *
+     * @brief The players who were in the game initiall
      */
-    std::vector<PlayerId> playersInHand;
+    std::vector<PlayerId> playersInGame;
 
     /**
      * @brief The players who can still bet (playersInHand - players who have
@@ -90,6 +88,12 @@ class PlayersInHand {
      *
      */
     std::unordered_set<PlayerId> playersWhoCanBet;
+
+    /**
+     * @brief The players who folded and are no longer in the hand.
+     *
+     */
+    std::unordered_set<PlayerId> playersWhoFolded;
 
     /**
      * @brief The player who the action is currently on.

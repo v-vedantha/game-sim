@@ -68,6 +68,7 @@ class TokenStream {
 };
 
 Suit parseSuit(TokenStream &stream) {
+    // Parse the suit and consume the corresponding tokens.
     // The tokens corresponding to each suit are shown below
     // Spades = S or s
     // Clubs = C or c
@@ -99,6 +100,7 @@ Suit parseSuit(TokenStream &stream) {
 }
 
 Value parseValue(TokenStream &stream) {
+    // Parse the value and consume the corresponding tokens.
     // For the numeric cards, we can only parse their numeric values (i.e. 2-10)
     // For face cards, we only parse the first letter capitalized (J, Q, K, A)
     char firstChar = stream.consume();
@@ -144,7 +146,7 @@ Value parseValue(TokenStream &stream) {
 }
 
 Card parseCard(TokenStream &stream) {
-    // Cards are meant to be formatter as ValueSuit
+    // Cards are meant to be formatter as ValueSuit e.g. 10H
 
     // First parse the value. Note that this will throw an exception if the
     // value cannot be parsed.
@@ -166,10 +168,7 @@ std::vector<Card> parseCards(const std::string &input) {
 
     std::vector<Card> cards;
     while (stream.hasNext()) {
-        // Any of these operations can throw, and since we dont catch it the
-        // caller of parseCards must deal with it.
-        // One improvement would be to return the cards we were able to parse in
-        // case we get an error.
+        // Any of these operations can throw.
         cards.push_back(parseCard(stream));
     }
     return cards;

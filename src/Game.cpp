@@ -11,7 +11,7 @@ Game::Game(std::vector<PlayerId> playerIds,
       playersInHand(std::make_shared<PlayersInHand>(playerIds)),
       bets(playerIds, playersInHand, std::move(chips)) {
 
-    // The bets/table cards structures require that you start the round before
+    // The table cards/bets interfaces require that you start the round before
     // using them.
     tableCards.startGame(rng);
 
@@ -37,7 +37,7 @@ void Game::dealToNextStreet() {
 PlayerId Game::nextIdToAct() { return bets.nextIdToAct(); }
 
 void Game::finish() {
-    // Make sure betting is finished up
+    // Make sure betting is complete
     assert(bets.bettingRoundComplete());
 
     // The game can only finish on the river. Even if all players go all-in
