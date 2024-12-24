@@ -5,7 +5,7 @@
 std::vector<std::vector<Card>>
 generateCombinations(const std::vector<Card> &cards, uint32_t numToChoose,
                      uint32_t startIdx) {
-    // If we've past the end of cards, something went wrong
+    // If we've passed the end of cards, something went wrong
     assert(startIdx < cards.size());
     // If you want to choose zero cards, then there is only one zero-element
     // combination.
