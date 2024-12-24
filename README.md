@@ -17,7 +17,7 @@ This repository provides a simulator and hand evaluator for Texas Hold'em poker.
 - TableCards: The cards on the table (i.e. all the cards in a game)
 - Hand: 5 cards you can construct using your two hole cards and the board.
 - Rank of a hand/Primary hand: Royal flush, Pair, Quads etc.
-- Strength: A comparable object which describes how strong a hand is. Rank + kickers. 
+- Strength: How strong a hand is. Strengths can be compared. Rank + kickers. 
 - Kickers: The rest of When two hands with the same rank are compared, they could still differ in kickers. For example, an Ace high flush beats a king high flush becase the Ace kicker beats the King. This is slightly different from the usual definition because kickers includes the cards that make up the primary hand
 - Street: Preflop, Flop, Turn, River. Streets tell you how many cards are dealt to the board. On the flop there are 3, turn has 4, and river has 5. 
 - Round: Somewhat similar to street. Used mostly interchangably.
