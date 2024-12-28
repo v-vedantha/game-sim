@@ -112,7 +112,7 @@ Pot::getWinnings(TableCards &tableCards, PlayersInHand &playersInHand) {
         }
 
         // Distributed the winnings evenly amongst the winners.
-        // Since chips are integral, this is perfect.
+        // Since chips are integral, this is imperfect.
         std::vector<PlayerId> potWinners = tableCards.getWinners(playersInPot);
         int amountPerPerson = potAmt / potWinners.size();
 

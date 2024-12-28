@@ -14,17 +14,10 @@ TableCards::TableCards(std::vector<PlayerId> players) {
     this->players = players;
 }
 
-void TableCards::startGame(std::mt19937 &rng) {
-    shuffleDeck(rng);
-
-    // We must deal hole cards to the players since we did not do so in the
-    // constructor
+void TableCards::dealPlayerCards() {
     for (const PlayerId &player : players) {
         holeCards[player].dealCards(deck);
     }
-
-    // Don't need to deal any cards to the board since every game starts
-    // Pre-Flop (i.e. only hole cards)
 }
 
 void TableCards::dealToStreet(Street street) {

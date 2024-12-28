@@ -13,7 +13,8 @@ Game::Game(std::vector<PlayerId> playerIds,
 
     // The table cards/bets interfaces require that you start the round before
     // using them.
-    tableCards.startGame(rng);
+    tableCards.shuffleDeck(rng);
+    tableCards.dealPlayerCards();
 
     // The first betting round is always going to be the Preflop (even if
     // everyone checks, it is a betting round), so we can just start the
@@ -46,14 +47,26 @@ void Game::finish() {
     bets.distributeWinnings(tableCards);
 }
 
-void Game::check(PlayerId playerId) { bets.check(playerId); }
+void Game::check(PlayerId playerId) {
+    assert(!bets.bettingRoundComplete());
+    bets.check(playerId);
+}
 
-void Game::call(PlayerId playerId) { bets.call(playerId); }
+void Game::call(PlayerId playerId) {
+
+    assert(!bets.bettingRoundComplete());
+    bets.call(playerId);
+}
 
 void Game::raiseTo(PlayerId playerId, int amount) {
+    assert(!bets.bettingRoundComplete());
     bets.raiseTo(playerId, amount);
 }
 
-void Game::allIn(PlayerId playerId) { bets.allIn(playerId); }
+void Game::allIn(PlayerId playerId) {
+    assert(!bets.bettingRoundComplete());
+
+    bets.allIn(playerId);
+}
 
 int Game::stack(PlayerId playerId) { return bets.stack(playerId); }

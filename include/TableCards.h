@@ -23,13 +23,11 @@ class TableCards {
     TableCards(std::vector<PlayerId> players);
 
     /**
-     * @brief Starts the game by dealing 2 cards to each player. Meant to be the
-     * first method called after the constructor.
+     * @brief Deals cards out to the players until all players have 2 cards.
      *
-     * @param rng Used to shuffle the deck.
      * @return void
      */
-    void startGame(std::mt19937 &rng);
+    void dealPlayerCards();
 
     /**
      * @brief Deals out cards to the board up to the specified street.
