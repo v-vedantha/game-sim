@@ -13,11 +13,13 @@ target_link_libraries(
   CliTest
   PUBLIC GTest::gtest_main
   PUBLIC Cli
+  PUBLIC Server
 )
 
 target_include_directories(
   CliTest
   PUBLIC ../../include/cli
+  PUBLIC ../../include/server
 )
 
 include(GoogleTest)

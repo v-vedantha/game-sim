@@ -10,16 +10,12 @@ include_directories( ${Boost_INCLUDE_DIR} )
 
 
 
-add_library(Cli Main.cpp
-                Command.cpp
-                Context.cpp
-                Connection.cpp
-                Shell.cpp)
+add_library(Server  Server.cpp)
 
 
 
 target_include_directories(
-    Cli
-    PUBLIC ../../include/cli
+    Server
+    PUBLIC ../../include/server
 )
 

@@ -8,7 +8,8 @@ namespace cli {
  */
 class Connection {
   public:
-    void sendMessage(const std::string &message);
+    Connection();
+    int sendMessage(const std::string &message);
 };
 
 } // namespace cli
