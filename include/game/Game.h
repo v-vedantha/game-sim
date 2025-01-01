@@ -16,6 +16,19 @@ class Game {
 
   public:
     /**
+     * @brief Construct a game given some players, their chipStacks, and a
+     * random number generator.
+     *
+     * @param playerIds The players in the game. Betting order proceeds from the
+     * first player in this vector onwards.
+     * @param chips     The initial chip stacks.
+     * @param rng       Random number generater. Used to shuffle the deck etc.
+     */
+    Game(std::vector<PlayerId> playerIds,
+         std::unique_ptr<std::unordered_map<PlayerId, int>> chips,
+         std::mt19937 &rng);
+
+    /**
      * @brief Finishes a game, distributing winnings to respecitve players.
      *
      */
@@ -80,19 +93,6 @@ class Game {
      * @return int     Their stack
      */
     int stack(PlayerId playerId);
-
-    /**
-     * @brief Construct a game given some players, their chipStacks, and a
-     * random number generator.
-     *
-     * @param playerIds The players in the game. Betting order proceeds from the
-     * first player in this vector onwards.
-     * @param chips     The initial chip stacks.
-     * @param rng       Random number generater. Used to shuffle the deck etc.
-     */
-    Game(std::vector<PlayerId> playerIds,
-         std::unique_ptr<std::unordered_map<PlayerId, int>> chips,
-         std::mt19937 &rng);
 
   private:
     std::vector<std::weak_ptr<PlayerId>> players;

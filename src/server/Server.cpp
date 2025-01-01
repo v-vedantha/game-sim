@@ -1,39 +1,43 @@
 #include "Server.h"
+#include "Handlers.h"
 
 #include <boost/asio.hpp>
 #include <boost/beast.hpp>
 #include <iostream>
+#include <memory>
 #include <string>
+
+using namespace server;
 
 namespace asio = boost::asio;
 namespace beast = boost::beast;
 namespace http = beast::http;
 
-void handle_request(http::request<http::string_body> req,
-                    http::response<http::string_body> &res) {
-    std::cout << "Handling the request" << std::endl;
-    // Prepare the HTTP response
-    res.version(req.version());
-    res.keep_alive(req.keep_alive());
-    res.result(http::status::ok);
-    res.set(http::field::content_type, "text/plain");
+std::unique_ptr<http::response<http::string_body>>
+handle_request(http::request<http::string_body> req) {
 
-    // Process the request
-    if (req.method() == http::verb::get) {
-        res.body() = "Hello! You sent a GET request.";
-    } else if (req.method() == http::verb::post) {
-        res.body() = "Hello! You sent a POST request with body: " + req.body();
-    } else {
-        res.result(http::status::bad_request);
-        res.body() = "Unsupported HTTP method.";
-    }
-    std::cout << "Preparing payload" << std::endl;
-    res.prepare_payload();
+    // Make a default response. Unique ptr because we want to return this
+    // response without copying it.
+    std::unique_ptr<http::response<http::string_body>> res =
+        std::make_unique<http::response<http::string_body>>();
+
+    std::cout << "Got a request" << std::endl;
+    // Common amongst all types of responses.
+    // If this is not the case in the future, we can break this abstraction.
+    res->version(req.version());
+    res->keep_alive(req.keep_alive());
+    res->result(http::status::ok);
+    res->set(http::field::content_type, "text/plain");
+
+    Dispatcher dispatcher;
+    dispatcher.handleRequest(req, *res);
+
+    res->prepare_payload();
+    return res;
 }
 
 void session(asio::ip::tcp::socket socket) {
     try {
-        std::cout << "Running session " << std::endl;
         beast::flat_buffer buffer;
 
         // Read the HTTP request
@@ -41,15 +45,11 @@ void session(asio::ip::tcp::socket socket) {
         http::read(socket, buffer, req);
 
         // Prepare the HTTP response
-        http::response<http::string_body> res;
-        handle_request(req, res);
-
-        std::cout << "Request handled" << std::endl;
+        std::unique_ptr<http::response<http::string_body>> res =
+            handle_request(req);
 
         // Send the response
-        http::write(socket, res);
-
-        std::cout << "wrote response" << std::endl;
+        http::write(socket, *res);
 
         // Close the connection
         socket.shutdown(asio::ip::tcp::socket::shutdown_send);
@@ -60,9 +60,8 @@ void session(asio::ip::tcp::socket socket) {
     }
 }
 
-int start_listener() {
+void server::start_server() {
     try {
-        std::cout << "Starting the listener" << std::endl;
         // Create I/O context
         asio::io_context io_context;
 
@@ -74,10 +73,8 @@ int start_listener() {
 
         while (true) {
             // Accept a new connection
-            std::cout << "vibes" << std::endl;
             asio::ip::tcp::socket socket(io_context);
             acceptor.accept(socket);
-            std::cout << "vibes" << std::endl;
 
             // Handle the session in a new thread
             std::thread(session, std::move(socket)).detach();
@@ -85,14 +82,4 @@ int start_listener() {
     } catch (const std::exception &e) {
         std::cerr << "Server error: " << e.what() << std::endl;
     }
-
-    return 0;
-}
-
-void Server::start() { start_listener(); }
-
-void start_server() {
-    std::cout << "Starting the server" << std::endl;
-    Server server;
-    server.start();
-}
+};
