@@ -12,52 +12,29 @@ namespace asio = boost::asio;
 namespace beast = boost::beast;
 namespace http = beast::http;
 
-class CreateGameHandler : public RequestHandler {
-  public:
-    CreateGameHandler() {}
-    bool matches(const http::request<http::string_body> &req) override {
-        return req.target() == "/hi" && req.method() == http::verb::post;
-    }
+std::unique_ptr<std::string> handleCreateGame(Games &games) {
 
-    std::unique_ptr<std::string>
-    handle(const http::request<http::string_body> &req) override {
+    GameId gameId = games.createGame();
 
-        GameId gameId("hi"); // = games.createGame();
+    boost::json::value gameIdJson = gameId.to_json();
+    std::string gameIdAsString(boost::json::serialize(gameIdJson));
 
-        boost::json::value gameIdJson = gameId.to_json();
-        std::string gameIdAsString(boost::json::serialize(gameIdJson));
-
-        return std::make_unique<std::string>(gameIdAsString);
-    }
-};
-
-// This is technically a unique pointer but it is cleaner to treat it as a
-// shared pointer because unique_ptr runs into some copying issues when
-// iterating over the vector.
-
-// The dispatcher also maintains references to the handlers in
-// allRequestHandlers, but as these handlers are stateless, and just a place
-// to store functions, this is fine.
-Dispatcher::Dispatcher() {
-    this->requestHandlers.push_back(std::make_shared<CreateGameHandler>());
+    return std::make_unique<std::string>(gameIdAsString);
 }
 
-void Dispatcher::handleRequest(http::request<http::string_body> &req,
-                               http::response<http::string_body> &res) {
+std::unique_ptr<http::response<http::string_body>>
+Dispatcher::handleRequest(http::request<http::string_body> &req) {
+    std::unique_ptr<http::response<http::string_body>> res =
+        std::make_unique<http::response<http::string_body>>();
 
-    bool requestHandled = false;
-    for (auto &handler : requestHandlers) {
-        bool handlerCanHandle = handler->matches(req);
-        if (handlerCanHandle && !requestHandled) {
-            res.body() = *(handler->handle(req));
-            requestHandled = true;
-        } else if (handlerCanHandle && requestHandled) {
-            res.result(http::status::bad_request);
-            res.body() = "Ambiguous request. Multiple handlers";
-        }
-    }
-    if (!requestHandled) {
-        res.result(http::status::bad_request);
-        res.body() = "Unsupported HTTP method.";
-    }
+    std::cout << "Got a request" << std::endl;
+    res->version(req.version());
+    res->keep_alive(req.keep_alive());
+    res->result(http::status::ok);
+    res->set(http::field::content_type, "text/plain");
+
+    res->body() = *handleCreateGame(games);
+
+    res->prepare_payload();
+    return res;
 }
