@@ -1,24 +1,12 @@
+#include "Games.h"
 #include "Server.h"
+#include <gtest/gtest.h>
 
-using namespace server;
-
-TEST(GameLifecycle, StartGame) {
+TEST(GameLifecycle, CreateGame) {
+    Games games;
 
     // Create a game
-    auto response = makeRequest(CreateGame());
+    auto response = handleCreateGame(games);
 
-    GameInfo gameInfo = GameInfo(response);
-
-    GameId gameId = gameInfo.gameId();
-
-    // Cannot start the game until 2 people have joined
-    PlayerId p1 = PlayerId("p1");
-    PlayerId p2 = PlayerId("p2");
-    makeRequest(JoinGame(p1));
-    makeRequest(JoinGame(p2));
-
-    makeRequest(StartGame(p1));
-
-    // TBD
-    makeRequest(EndGame());
+    std::cout << *response << std::endl;
 }

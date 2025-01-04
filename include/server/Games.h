@@ -1,3 +1,4 @@
+#pragma once
 #include "GameId.h"
 #include <unordered_map>
 

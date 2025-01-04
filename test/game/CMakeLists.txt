@@ -5,6 +5,9 @@ project(my_project)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+#find_package(Boost 1.87) 
+#include_directories( ${Boost_INCLUDE_DIRS} )
+
 add_library(TestLib  TestUtils.cpp )
 
 add_executable(
@@ -18,7 +21,7 @@ add_executable(
 
 target_link_libraries(
   CardParserTest
-  PUBLIC GTest::gtest_main
+  PRIVATE GTest::gtest_main
   PUBLIC PokerLib
   PUBLIC TestLib
 )

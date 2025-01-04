@@ -5,14 +5,14 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
-find_package(Boost 1.87) 
-include_directories( ${Boost_INCLUDE_DIR} )
+find_package(Boost 1.87 REQUIRED) 
 
 
 
 add_library(Server  Server.cpp
                     GameId.cpp
-                    Handlers.cpp
+                    Server.cpp
+                    HttpListener.cpp
                     Games.cpp
 )
 
@@ -21,5 +21,6 @@ add_library(Server  Server.cpp
 target_include_directories(
     Server
     PUBLIC ../../include/server
+    PUBLIC ${Boost_INCLUDE_DIRS}
 )
 

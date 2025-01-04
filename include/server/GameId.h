@@ -11,7 +11,7 @@ class GameId {
 
     friend std::ostream &operator<<(std::ostream &os, const GameId &gameId);
 
-    boost::json::value to_json();
+    std::unique_ptr<boost::json::object> to_json();
 };
 
 std::ostream &operator<<(std::ostream &os, const GameId &gameId);
