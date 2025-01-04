@@ -35,3 +35,5 @@ build/
 Testing/
 
 .vscode/
+
+.cache/
