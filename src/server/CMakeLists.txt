@@ -10,7 +10,7 @@ find_package(Boost 1.87 REQUIRED)
 
 
 add_library(Server  Server.cpp
-                    GameId.cpp
+                    RoomId.cpp
                     Server.cpp
                     HttpListener.cpp
                     Games.cpp

@@ -1,12 +1,11 @@
 #pragma once
-#include "Games.h"
+#include "Rooms.h"
 #include <boost/asio.hpp>
 #include <boost/beast.hpp>
 #include <memory>
 #include <string>
 #include <vector>
 
-namespace asio = boost::asio;
 namespace beast = boost::beast;
 namespace http = beast::http;
 
@@ -16,7 +15,7 @@ namespace http = beast::http;
  * @param games
  * @return std::unique_ptr<std::string>
  */
-std::unique_ptr<boost::json::object> handleCreateGame(Games &games);
+std::unique_ptr<boost::json::object> handleCreateGame(Rooms &rooms);
 
 class Server {
   public:
@@ -30,5 +29,5 @@ class Server {
     handleRequest(http::request<http::string_body> &req);
 
   private:
-    Games games;
+    Rooms rooms;
 };

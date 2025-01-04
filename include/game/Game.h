@@ -29,7 +29,7 @@ class Game {
          std::mt19937 &rng);
 
     /**
-     * @brief Finishes a game, distributing winnings to respecitve players.
+     * @brief Finishes a game, distributing winnings to respective players.
      *
      */
     void finish();
