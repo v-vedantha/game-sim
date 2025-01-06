@@ -27,7 +27,7 @@ class HttpListener {
 
             // Prepare the HTTP response
             std::unique_ptr<http::response<http::string_body>> res =
-                server->handleRequest(req);
+                server->dispatch(req);
 
             // Send the response
             http::write(socket, *res);

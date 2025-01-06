@@ -13,7 +13,8 @@ add_library(Server  Server.cpp
                     RoomId.cpp
                     Server.cpp
                     HttpListener.cpp
-                    Games.cpp
+                    Rooms.cpp
+                    Room.cpp
 )
 
 

@@ -1,3 +1,9 @@
 #include "Rooms.h"
 
-RoomId Rooms::createRoom() { return RoomId("hi"); }
+RoomId Rooms::createRoom() {
+    RoomId roomId = roomIdCreator.createRoomId();
+
+    rooms[roomId] = Room();
+
+    return roomId;
+}

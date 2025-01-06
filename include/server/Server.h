@@ -15,7 +15,7 @@ namespace http = beast::http;
  * @param games
  * @return std::unique_ptr<std::string>
  */
-std::unique_ptr<boost::json::object> handleCreateGame(Rooms &rooms);
+std::unique_ptr<boost::json::object> handleCreateRoom(Rooms &rooms);
 
 class Server {
   public:
@@ -26,7 +26,7 @@ class Server {
      * @return std::unique_ptr<http::response<http::string_body>> The response
      */
     std::unique_ptr<http::response<http::string_body>>
-    handleRequest(http::request<http::string_body> &req);
+    dispatch(http::request<http::string_body> &req);
 
   private:
     Rooms rooms;

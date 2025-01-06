@@ -10,7 +10,7 @@
 namespace beast = boost::beast;
 namespace http = beast::http;
 
-std::unique_ptr<boost::json::object> handleCreateGame(Rooms &rooms) {
+std::unique_ptr<boost::json::object> handleCreateRoom(Rooms &rooms) {
 
     RoomId roomId = rooms.createRoom();
 
@@ -18,7 +18,7 @@ std::unique_ptr<boost::json::object> handleCreateGame(Rooms &rooms) {
 }
 
 std::unique_ptr<http::response<http::string_body>>
-Server::handleRequest(http::request<http::string_body> &req) {
+Server::dispatch(http::request<http::string_body> &req) {
     std::unique_ptr<http::response<http::string_body>> res =
         std::make_unique<http::response<http::string_body>>();
 
@@ -27,7 +27,15 @@ Server::handleRequest(http::request<http::string_body> &req) {
     res->result(http::status::ok);
     res->set(http::field::content_type, "text/plain");
 
-    res->body() = boost::json::serialize(*handleCreateGame(rooms));
+    std::cout << req.base() << std::endl;
+    std::cout << req.target() << std::endl;
+
+    if (req.target() == "/room" && req.method() == http::verb::post) {
+        res->body() = boost::json::serialize(*handleCreateRoom(rooms));
+    } else {
+        res->result(http::status::not_implemented);
+        res->body() = "Bad Request";
+    }
 
     res->prepare_payload();
     return res;

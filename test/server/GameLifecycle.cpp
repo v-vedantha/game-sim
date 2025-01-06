@@ -1,12 +1,12 @@
-#include "Games.h"
+#include "Rooms.h"
 #include "Server.h"
 #include <gtest/gtest.h>
 
 TEST(GameLifecycle, CreateGame) {
-    Games games;
+    Rooms rooms;
 
     // Create a game
-    auto response = handleCreateGame(games);
+    auto response = handleCreateRoom(rooms);
 
     std::cout << *response << std::endl;
 }
