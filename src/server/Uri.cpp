@@ -77,10 +77,6 @@ Uri::Uri(const std::string &uri, http::verb verb) {
     m_uri = uri;
     m_verb = verb;
     components = parseFormat(uri);
-    for (auto component : components) {
-
-        std::cout << component << std::endl;
-    }
 }
 
 bool Uri::canParse(const std::string &uri, http::verb verb) {
