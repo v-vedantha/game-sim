@@ -15,6 +15,7 @@ add_library(Server  Server.cpp
                     HttpListener.cpp
                     Rooms.cpp
                     Room.cpp
+                    Uri.cpp
 )
 
 

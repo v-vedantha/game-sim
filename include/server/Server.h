@@ -1,4 +1,5 @@
 #pragma once
+#include "Endpoint.h"
 #include "Rooms.h"
 #include <boost/asio.hpp>
 #include <boost/beast.hpp>
@@ -28,6 +29,9 @@ class Server {
     std::unique_ptr<http::response<http::string_body>>
     dispatch(http::request<http::string_body> &req);
 
+    Server();
+
   private:
-    Rooms rooms;
+    RoomsController roomsController;
+    std::vector<std::shared_ptr<Endpoint>> endpoints;
 };

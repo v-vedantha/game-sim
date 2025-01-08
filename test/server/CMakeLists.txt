@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Boost 1.87) 
 
 add_executable(
-    ServerTest GameLifecycle.cpp)
+    ServerTest GameLifecycle.cpp UriTest.cpp)
 
 target_link_libraries(
   ServerTest

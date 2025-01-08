@@ -10,11 +10,10 @@
 namespace beast = boost::beast;
 namespace http = beast::http;
 
-std::unique_ptr<boost::json::object> handleCreateRoom(Rooms &rooms) {
-
-    RoomId roomId = rooms.createRoom();
-
-    return roomId.to_json();
+Server::Server() {
+    auto roomsControllerEndpoints = roomsController.endpoints();
+    endpoints.insert(endpoints.end(), roomsControllerEndpoints.begin(),
+                     roomsControllerEndpoints.end());
 }
 
 std::unique_ptr<http::response<http::string_body>>
@@ -24,17 +23,24 @@ Server::dispatch(http::request<http::string_body> &req) {
 
     res->version(req.version());
     res->keep_alive(req.keep_alive());
-    res->result(http::status::ok);
     res->set(http::field::content_type, "text/plain");
 
     std::cout << req.base() << std::endl;
     std::cout << req.target() << std::endl;
 
-    if (req.target() == "/room" && req.method() == http::verb::post) {
-        res->body() = boost::json::serialize(*handleCreateRoom(rooms));
-    } else {
+    bool reqHandled = false;
+    for (auto endpoint : endpoints) {
+        std::string target = req.target();
+        if (endpoint->canHandle(target, req.method())) {
+            endpoint->handle(req, *res);
+            reqHandled = true;
+            break;
+        }
+    }
+
+    if (!reqHandled) {
         res->result(http::status::not_implemented);
-        res->body() = "Bad Request";
+        res->body() = "Error not implemented";
     }
 
     res->prepare_payload();

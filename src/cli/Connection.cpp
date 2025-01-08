@@ -30,7 +30,8 @@ int Connection::sendMessage(const std::string &message) {
         asio::connect(socket, endpoints);
 
         // Create HTTP request
-        http::request<http::string_body> request(http::verb::post, "/hi", 11);
+        http::request<http::string_body> request(http::verb::post, "/games",
+                                                 11);
         request.set(http::field::host, "localhost");
         request.set(http::field::content_type, "text/plain");
         request.body() = "Hello, localhost!";
