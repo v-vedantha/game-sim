@@ -9,7 +9,7 @@ std::ostream &operator<<(std::ostream &os, const Component &component) {
        << "\", isDynamic: " << (component.isDynamic ? "true" : "false") << " }";
     return os;
 }
-// Function to parse a formatted URI into components
+
 std::vector<Component> parseFormat(const std::string &format) {
     std::vector<Component> components;
     std::regex segmentRegex(R"(/(\{?(\w+)\}?))"); // Regex to match each segment
@@ -33,13 +33,11 @@ std::vector<Component> parseFormat(const std::string &format) {
     return components;
 }
 
-// Structure to represent a parsed URI
 struct ParsedUri {
     std::vector<std::string> path_segments;
     std::map<std::string, std::string> query_params;
 };
 
-// Function to parse a URI into path segments and query parameters
 ParsedUri parseUri(const std::string &uri) {
     ParsedUri result;
 
