@@ -57,8 +57,7 @@ class Uri {
 
     /**
      * @brief Constructs target using the given dynamic components and filters.
-     * For the sake of consistency, filters are guarunteed to be added
-     * in alphabetical order.
+     * Filters are guarunteed to be in alphabetical order.
      */
     std::unique_ptr<std::string>
     buildTarget(std::map<std::string, std::string> &dynamicComponents,

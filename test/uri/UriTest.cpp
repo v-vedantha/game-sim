@@ -53,5 +53,7 @@ TEST(UriTest, CreateTarget) {
 
     auto target = uri.buildTarget(dynamicComponents, filters);
 
+    // Since filters are guarunteed to be in alphabetical order, we are fine
+    // here.
     EXPECT_EQ(*target, "/game/someGameId?filter1=value1&filter2=value2");
 }
