@@ -15,15 +15,20 @@ class CreateRoomEndpoint : public Endpoint {
   private:
     std::shared_ptr<Rooms> m_rooms;
     Uri m_uri;
+    http::verb m_verb;
 
   public:
     CreateRoomEndpoint(std::shared_ptr<Rooms> rooms) {
         m_rooms = rooms;
-        m_uri = Uri("/games", http::verb::post);
+        m_uri = Uri("/games");
+        m_verb = http::verb::post;
     }
 
     virtual bool canHandle(std::string &uri, http::verb verb) override {
-        return m_uri.canParse(uri, verb);
+        if (m_verb != verb) {
+            return false;
+        }
+        return m_uri.canParse(uri);
     }
 
     virtual void handle(const http::request<http::string_body> &req,

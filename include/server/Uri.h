@@ -1,10 +1,6 @@
-#include <boost/asio.hpp>
-#include <boost/beast.hpp>
 #include <map>
 #include <string>
 
-namespace beast = boost::beast;
-namespace http = beast::http;
 /**
  * @brief A Uri is a resource identified. It looks like '/game/{gameId}'
  * purpose of this class is to represent and parse URIs
@@ -22,7 +18,6 @@ std::ostream &operator<<(std::ostream &os, const Component &component);
 class Uri {
   private:
     std::string m_uri;
-    http::verb m_verb;
     std::vector<Component> components;
 
   public:
@@ -33,7 +28,7 @@ class Uri {
      * gameId), while normal components are considered static (i.e. the game)
      *
      */
-    Uri(const std::string &format, http::verb verb);
+    Uri(const std::string &format);
 
     /**
      * @brief Default constructor to make this easier to work with. Leaves the
@@ -61,8 +56,8 @@ class Uri {
     parseFilters(const std::string &uri);
 
     /**
-     * @brief Determins whether the given string can be parsed as this URI.
+     * @brief Determines whether the given string can be parsed as this URI.
      *
      */
-    bool canParse(const std::string &uri, http::verb verb);
+    bool canParse(const std::string &uri);
 };

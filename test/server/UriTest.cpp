@@ -3,37 +3,31 @@
 #include <gtest/gtest.h>
 
 TEST(UriTest, ParseStaticSuccess) {
-    Uri uri = Uri("/game", http::verb::get);
+    Uri uri = Uri("/game");
 
-    EXPECT_TRUE(uri.canParse("/game", http::verb::get));
+    EXPECT_TRUE(uri.canParse("/game"));
 }
 
 TEST(UriTest, ParseStaticFail) {
-    Uri uri = Uri("/game", http::verb::get);
+    Uri uri = Uri("/game");
 
-    EXPECT_FALSE(uri.canParse("/notGame", http::verb::get));
-}
-
-TEST(UriTest, ParseStaticFailBecauseVerb) {
-    Uri uri = Uri("/game", http::verb::get);
-
-    EXPECT_FALSE(uri.canParse("/game", http::verb::put));
+    EXPECT_FALSE(uri.canParse("/notGame"));
 }
 
 TEST(UriTest, ParseDynamicSuccess) {
-    Uri uri = Uri("/game/{gameId}", http::verb::get);
+    Uri uri = Uri("/game/{gameId}");
 
-    EXPECT_TRUE(uri.canParse("/game/haha", http::verb::get));
+    EXPECT_TRUE(uri.canParse("/game/haha"));
 }
 
 TEST(UriTest, ParseDynamicWithFilters) {
-    Uri uri = Uri("/game/{gameId}", http::verb::get);
+    Uri uri = Uri("/game/{gameId}");
 
-    EXPECT_TRUE(uri.canParse("/game/haha?key=value", http::verb::get));
+    EXPECT_TRUE(uri.canParse("/game/haha?key=value"));
 }
 
 TEST(UriTest, ParseFilters) {
-    Uri uri = Uri("/game/{gameId}", http::verb::get);
+    Uri uri = Uri("/game/{gameId}");
 
     auto filters = uri.parseFilters("/game/haha?key=value");
 
@@ -41,7 +35,7 @@ TEST(UriTest, ParseFilters) {
 }
 
 TEST(UriTest, ParseDynamic) {
-    Uri uri = Uri("/game/{gameId}", http::verb::get);
+    Uri uri = Uri("/game/{gameId}");
 
     auto dynamicComponents = uri.parseDynamicComponents("/game/haha?key=value");
 

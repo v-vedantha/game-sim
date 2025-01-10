@@ -69,19 +69,14 @@ ParsedUri parseUri(const std::string &uri) {
     return result;
 }
 
-Uri::Uri() { Uri("/", http::verb::get); }
+Uri::Uri() { Uri("/"); }
 
-Uri::Uri(const std::string &uri, http::verb verb) {
+Uri::Uri(const std::string &uri) {
     m_uri = uri;
-    m_verb = verb;
     components = parseFormat(uri);
 }
 
-bool Uri::canParse(const std::string &uri, http::verb verb) {
-    if (m_verb != verb) {
-        return false;
-    }
-
+bool Uri::canParse(const std::string &uri) {
     ParsedUri parsedUri = parseUri(uri);
 
     if (components.size() != parsedUri.path_segments.size()) {
