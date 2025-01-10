@@ -56,6 +56,15 @@ class Uri {
     parseFilters(const std::string &uri);
 
     /**
+     * @brief Constructs target using the given dynamic components and filters.
+     * For the sake of consistency, filters are guarunteed to be added
+     * in alphabetical order.
+     */
+    std::unique_ptr<std::string>
+    buildTarget(std::map<std::string, std::string> &dynamicComponents,
+                std::map<std::string, std::string> &filters);
+
+    /**
      * @brief Determines whether the given string can be parsed as this URI.
      *
      */

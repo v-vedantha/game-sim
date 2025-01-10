@@ -2,6 +2,7 @@
 #include <cassert>
 #include <iostream>
 #include <regex>
+#include <sstream>
 #include <string>
 
 std::ostream &operator<<(std::ostream &os, const Component &component) {
@@ -121,4 +122,51 @@ Uri::parseFilters(const std::string &uri) {
                     parsedUri.query_params.end());
 
     return filters;
+}
+
+std::unique_ptr<std::string>
+Uri::buildTarget(std::map<std::string, std::string> &dynamicComponents,
+                 std::map<std::string, std::string> &filters) {
+
+    std::vector<std::string> formattedComponents;
+
+    for (Component &component : components) {
+        // Static components can just be filled in by their name
+        if (!component.isDynamic) {
+            formattedComponents.push_back(component.name);
+        } else {
+            // Dynamic components are replaced by their value in
+            // dynamicComponents
+            assert(dynamicComponents.find(component.name) !=
+                   dynamicComponents.end());
+            formattedComponents.push_back(dynamicComponents[component.name]);
+        }
+    }
+
+    // Format the components
+    std::stringstream target;
+
+    for (std::string &component : formattedComponents) {
+        target << "/" << component;
+    }
+
+    // If no filters, we can just output the target directly
+    if (filters.size() != 0) {
+        // If there are filters first add a '?'
+        target << "?";
+
+        // Then for each filter format it as name=value
+        bool firstFilter = true;
+        for (auto it : filters) {
+            // Add an & between filters (i.e. before all but the first filter)
+            if (!firstFilter) {
+                target << "&";
+            }
+            firstFilter = false;
+
+            target << it.first << "=" << it.second;
+        }
+    }
+
+    return std::make_unique<std::string>(target.str());
 }
