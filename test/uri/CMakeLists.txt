@@ -7,20 +7,20 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Boost 1.87) 
 
 add_executable(
-    ServerTest GameLifecycle.cpp)
+    UriTest UriTest.cpp)
 
 target_link_libraries(
-  ServerTest
+  UriTest
+  PRIVATE Uri
   PRIVATE GTest::gtest_main
-  PRIVATE Server
 )
 
 target_include_directories(
-  ServerTest
-  PRIVATE ../../include/server
+  UriTest
+  PRIVATE ../../include/uri
   PRIVATE  ${Boost_INCLUDE_DIRS}
 )
 
 include(GoogleTest)
-gtest_discover_tests(ServerTest)
+gtest_discover_tests(UriTest)
 

@@ -15,14 +15,17 @@ add_library(Server  Server.cpp
                     HttpListener.cpp
                     Rooms.cpp
                     Room.cpp
-                    Uri.cpp
 )
 
 
 
+target_link_libraries(Server 
+PUBLIC Uri)
+
 target_include_directories(
     Server
     PUBLIC ../../include/server
+    PUBLIC ../../include/uri
     PUBLIC ${Boost_INCLUDE_DIRS}
 )
 

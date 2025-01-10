@@ -20,8 +20,12 @@ enable_testing()
 add_subdirectory(src/game)
 add_subdirectory(test/game)
 
+add_subdirectory(src/uri)
+add_subdirectory(test/uri)
+
 add_subdirectory(src/server)
 add_subdirectory(test/server)
 
 add_subdirectory(src/cli)
 add_subdirectory(test/cli)
+
